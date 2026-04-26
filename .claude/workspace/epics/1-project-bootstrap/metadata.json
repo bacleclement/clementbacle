@@ -1,0 +1,13 @@
+{
+  "key": "1",
+  "slug": "project-bootstrap",
+  "folder": "1-project-bootstrap",
+  "type": "epic",
+  "title": "E1 — Project bootstrap (Next.js init, local dev)",
+  "status": "completed",
+  "taskManager": { "synced": true, "url": "https://github.com/bacleclement/clementbacle/issues/1" },
+  "children": [],
+  "branch": "feat/#1-project-bootstrap",
+  "created_at": "2026-04-26T00:00:00Z",
+  "updated_at": "2026-04-26T00:00:00Z"
+}

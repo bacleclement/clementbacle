@@ -1,0 +1,64 @@
+{
+  "$schema": "~/.claude/kitt/.claude/templates/kitt.json.schema",
+  "kitt": {
+    "version": "1.0.0",
+    "installedAt": "2026-04-26T00:00:00Z"
+  },
+  "project": {
+    "name": "clementbacle",
+    "description": "Personal landing page — freelance dev & AI builder portfolio (clementbacle.dev). Built from Claude Design handoff, Next.js 16 + Tailwind, deployed on Vercel."
+  },
+  "taskManager": {
+    "type": "github-issues",
+    "config": {
+      "instanceUrl": "https://github.com/bacleclement/clementbacle",
+      "projectKey": "clementbacle",
+      "account": "bacleclement",
+      "statuses": {
+        "todo": "open",
+        "inProgress": "in-progress",
+        "review": "in-review",
+        "done": "closed",
+        "blocked": "blocked"
+      }
+    }
+  },
+  "vcs": {
+    "type": "github",
+    "config": {
+      "account": "bacleclement",
+      "org": "bacleclement",
+      "repo": "clementbacle",
+      "baseBranch": "main",
+      "worktrees": {
+        "path": "~/worktrees/clementbacle",
+        "setup": ["pnpm install"]
+      }
+    }
+  },
+  "build": {
+    "test": "pnpm test",
+    "typecheck": "pnpm tsc --noEmit",
+    "lint": "pnpm lint",
+    "build": "pnpm build"
+  },
+  "design": {
+    "type": "claude-design",
+    "config": {
+      "handoffUrl": "https://api.anthropic.com/v1/design/h/8fqu_ISF0YvRxUi9aWQ6MQ",
+      "themeName": "Programmer's Press",
+      "themeMode": "dark",
+      "fonts": ["Newsreader", "JetBrains Mono", "Geist"]
+    }
+  },
+  "commitFormat": {
+    "pattern": "{type}(#{issue}): {description}",
+    "types": ["feat", "fix", "refactor", "test", "docs", "chore", "style"],
+    "coAuthored": false
+  },
+  "deploy": {
+    "platform": "vercel",
+    "domain": "clementbacle.dev",
+    "branch": "main"
+  }
+}
