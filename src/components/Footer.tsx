@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <footer className="footer">
-      <div>
+      <div className="shell footer__inner">
         <div className="footer__cols">
           <div className="footer__col">
             <b>elsewhere</b>
@@ -20,9 +20,9 @@ export default function Footer() {
             <span>built with next.js</span>
           </div>
         </div>
-      </div>
-      <div className="footer__prompt">
-        ~ $ <span className="cursor"></span>
+        <div className="footer__prompt">
+          ~ $ <span className="cursor"></span>
+        </div>
       </div>
     </footer>
   );

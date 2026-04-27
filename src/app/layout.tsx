@@ -4,6 +4,8 @@ import "./globals.scss";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import ClementBanner from "@/components/ClementBanner";
+import Terminal from "@/components/Terminal";
+import ScrollTop from "@/components/ScrollTop";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
@@ -38,11 +40,11 @@ export default function RootLayout({
       className={`${newsreader.variable} ${jetbrainsMono.variable} ${geist.variable}`}
     >
       <body>
-        <div className="shell">
-          <Nav />
-          <main>{children}</main>
-          <Footer />
-        </div>
+        <Nav />
+        <main>{children}</main>
+        <Footer />
+        <Terminal />
+        <ScrollTop />
         <ClementBanner />
       </body>
     </html>

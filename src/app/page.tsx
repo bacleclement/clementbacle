@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import HeroFog from '@/components/HeroFog'
-import Terminal from '@/components/Terminal'
 import styles from './home.module.scss'
 
 export default function HomePage() {
@@ -10,49 +9,49 @@ export default function HomePage() {
       <section className={styles.hero}>
         <HeroFog />
 
-        <div className={styles.hero__eyebrow}>
-          <span className={styles.dot}></span>
-          <span>writing &amp; building &mdash; updated 27 apr 2026</span>
-        </div>
+        <div className="shell">
+          <div className={styles.hero__eyebrow}>
+            <span className={styles.dot}></span>
+            <span>writing &amp; building &mdash; updated 27 apr 2026</span>
+          </div>
 
-        <h1 className={styles.hero__title}>
-          I build <em>AI&nbsp;agents</em>
-          <br />
-          and write about
-          <br />
-          what actually works.
-        </h1>
+          <h1 className={styles.hero__title}>
+            I build <em>AI&nbsp;agents</em>
+            <br />
+            and write about
+            <br />
+            what actually works.
+          </h1>
 
-        <p className={styles.hero__sub}>
-          <b>~/clement</b> · senior fullstack engineer · lille, fr
-          <span className="cursor"></span>
-        </p>
+          <p className={styles.hero__sub}>
+            <b>~/clement</b> · senior fullstack engineer · lille, fr
+            <span className="cursor"></span>
+          </p>
 
-        {/* Decorative static terminal — aria-hidden, not interactive */}
-        <div className={styles.term} aria-hidden="true">
-          <div><span className="p">$</span> <span className="o">whoami</span></div>
-          <div>clement &mdash; ten years shipping web. ex-founder (12 ppl). currently at hublo (healthtech).</div>
-          <div><span className="p">$</span> <span className="o">cat ./focus.txt</span></div>
-          <div><span className="a">›</span> ai agents · context engineering · mcp · nestjs · entrepreneuriat</div>
-          <div style={{ marginTop: '6px' }}><span className="p">$</span> <span className="o">cat ./skills.txt</span></div>
-          <div><span className="a">›</span> <b style={{ color: 'var(--fg)', fontWeight: 400 }}>front</b> &nbsp; react · angular · svelte · typescript</div>
-          <div><span className="a">›</span> <b style={{ color: 'var(--fg)', fontWeight: 400 }}>back</b> &nbsp;&nbsp; nestjs · node · express</div>
-          <div><span className="a">›</span> <b style={{ color: 'var(--fg)', fontWeight: 400 }}>data</b> &nbsp; mongodb · postgresql · redis</div>
-          <div><span className="a">›</span> <b style={{ color: 'var(--fg)', fontWeight: 400 }}>ai</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; anthropic · openai · mcp · langchain</div>
-        </div>
+          {/* Decorative static terminal — aria-hidden, not interactive */}
+          <div className={styles.term} aria-hidden="true">
+            <div><span className="p">$</span> <span className="o">whoami</span></div>
+            <div>clement &mdash; ten years shipping web. ex-founder (12 ppl). currently at hublo (healthtech).</div>
+            <div><span className="p">$</span> <span className="o">cat ./focus.txt</span></div>
+            <div><span className="a">›</span> ai agents · context engineering · mcp · nestjs · entrepreneuriat</div>
+            <div style={{ marginTop: '6px' }}><span className="p">$</span> <span className="o">cat ./skills.txt</span></div>
+            <div><span className="a">›</span> <b style={{ color: 'var(--fg)', fontWeight: 400 }}>front</b> &nbsp; react · angular · svelte · typescript</div>
+            <div><span className="a">›</span> <b style={{ color: 'var(--fg)', fontWeight: 400 }}>back</b> &nbsp;&nbsp; nestjs · node · express</div>
+            <div><span className="a">›</span> <b style={{ color: 'var(--fg)', fontWeight: 400 }}>data</b> &nbsp; mongodb · postgresql · redis</div>
+            <div><span className="a">›</span> <b style={{ color: 'var(--fg)', fontWeight: 400 }}>ai</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; anthropic · openai · mcp · langchain</div>
+          </div>
 
-        {/* Interactive terminal */}
-        <Terminal />
-
-        <div className={styles.hero__meta}>
-          <div><span className={styles.k}>stack</span> React · Angular · Svelte · NestJS · Node</div>
-          <div><span className={styles.k}>data</span> MongoDB · PostgreSQL</div>
-          <div><span className={styles.k}>now</span> Hublo · senior fullstack</div>
-          <div><span className={styles.k}>before</span> Co-founder &amp; PO, Oscare · raised seed · 12 ppl · exited</div>
+          <div className={styles.hero__meta}>
+            <div><span className={styles.k}>stack</span> React · Angular · Svelte · NestJS · Node</div>
+            <div><span className={styles.k}>data</span> MongoDB · PostgreSQL</div>
+            <div><span className={styles.k}>now</span> Hublo · senior fullstack</div>
+            <div><span className={styles.k}>before</span> Co-founder &amp; PO, Oscare · raised seed · 12 ppl · exited</div>
+          </div>
         </div>
       </section>
 
       {/* ===================================================== LATEST WRITING */}
+      <div className="shell">
       <section style={{ marginTop: 'var(--s-9)' }}>
         <div className={styles['section-head']}>
           <h2>Latest <em>writing</em></h2>
@@ -187,6 +186,7 @@ export default function HomePage() {
           </a>
         </div>
       </section>
+      </div>{/* /shell */}
     </>
   )
 }

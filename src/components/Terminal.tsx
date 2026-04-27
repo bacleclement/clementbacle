@@ -1,7 +1,8 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
+import { initGame, processCommand as gameCmd, INTRO, type GameState } from '../lib/game-lovecraft'
 
 interface LogLine {
   id: number
@@ -24,6 +25,29 @@ function escHtml(s: string): string {
 
 export default function Terminal() {
   const router = useRouter()
+  const pathname = usePathname()
+  const [collapsed, setCollapsed] = useState(true)
+  const [navH, setNavH] = useState(57)
+  const [inGame, setInGame] = useState(false)
+  const gameRef = useRef<GameState | null>(null)
+
+  useEffect(() => {
+    if (window.innerWidth >= 900) queueMicrotask(() => setCollapsed(false))
+  }, [])
+
+  useEffect(() => {
+    function update() {
+      const open = !collapsed && window.innerWidth >= 900
+      document.documentElement.style.setProperty('--sidebar-w', open ? '300px' : '0px')
+    }
+    update()
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('resize', update)
+      document.documentElement.style.setProperty('--sidebar-w', '0px')
+    }
+  }, [collapsed])
+
   const [lines, setLines] = useState<LogLine[]>([
     { id: lineId++, html: '<span class="p">~ $</span> <span class="dim">welcome. type</span> <span class="kw">help</span> <span class="dim">to list commands.</span>' },
   ])
@@ -32,10 +56,25 @@ export default function Terminal() {
   const [, setHIdx] = useState(-1)
   const logRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const pathnameRef = useRef(pathname)
+
+  useEffect(() => { pathnameRef.current = pathname }, [pathname])
+
+  useEffect(() => {
+    const nav = document.querySelector('nav')
+    if (nav) queueMicrotask(() => setNavH(nav.offsetHeight))
+  }, [])
 
   useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
   }, [lines])
+
+  useEffect(() => {
+    if (!collapsed) inputRef.current?.focus()
+  }, [collapsed])
+
+  const currentPath = pathname === '/' ? '~/home' : '~' + pathname
+  const promptPath = inGame ? '[miskatonic]' : currentPath
 
   const out = useCallback((html: string) => {
     setLines((prev) => [...prev, { id: lineId++, html }])
@@ -62,6 +101,7 @@ export default function Terminal() {
           '<tr><td>cat skills.txt</td><td><span class="dim">stack &amp; skills</span></td></tr>' +
           '<tr><td>cat focus.txt</td><td><span class="dim">current focus</span></td></tr>' +
           '<tr><td>contact</td><td><span class="dim">how to reach me</span></td></tr>' +
+          '<tr><td>play</td><td><span class="dim">text adventure · The Miskatonic Manuscript</span></td></tr>' +
           '<tr><td>theme</td><td><span class="dim">toggle dark / light</span></td></tr>' +
           '<tr><td>clear</td><td><span class="dim">clear log</span></td></tr>' +
           '</table>',
@@ -118,6 +158,12 @@ export default function Terminal() {
         200,
       )
     },
+    play: () => {
+      const s = initGame()
+      gameRef.current = s
+      setInGame(true)
+      INTRO.forEach(l => out(l))
+    },
     cat: (arg?: string) => {
       const f = (arg ?? '').toLowerCase().replace(/^\.\//, '')
       if (f === 'skills.txt' || f === 'skills') {
@@ -146,7 +192,24 @@ export default function Terminal() {
     (raw: string) => {
       const cmd = raw.trim()
       if (!cmd) return
-      out(`<span class="p">~ $</span> ${escHtml(cmd)}`)
+
+      // ── Game mode ─────────────────────────────────────────────────────────────
+      const gs = gameRef.current
+      if (gs !== null && !gs.over) {
+        out(`<span class="p">[miskatonic] $</span> ${escHtml(cmd)}`)
+        const result = gameCmd(cmd, gs)
+        result.lines.forEach(l => out(l))
+        gameRef.current = result.next
+        if (result.next.over) {
+          gameRef.current = null
+          setInGame(false)
+        }
+        return
+      }
+
+      // ── Normal mode ───────────────────────────────────────────────────────────
+      const path = pathnameRef.current === '/' ? '~/home' : '~' + pathnameRef.current
+      out(`<span class="p">${escHtml(path)} $</span> ${escHtml(cmd)}`)
 
       if (cmd.startsWith('/')) {
         const route = ROUTES[cmd] ?? ROUTES[cmd.toLowerCase()]
@@ -203,38 +266,69 @@ export default function Terminal() {
         setInput(history[next] ?? '')
         return next
       })
+    } else if (e.key === 'Escape') {
+      setCollapsed(true)
     }
   }
 
   return (
-    <div className="termi" aria-label="interactive terminal" onClick={() => inputRef.current?.focus()}>
-      <div className="termi__head">
-        <span className="termi__dot"></span>
-        <span>
-          ~/home &mdash; type a command · try <span className="kw">help</span>
-        </span>
-        <span style={{ marginLeft: 'auto', opacity: 0.6 }}>⏎</span>
+    <aside
+      className={`termi-sidebar${collapsed ? ' termi-sidebar--collapsed' : ''}`}
+      style={{ top: navH }}
+    >
+      <button
+        className="termi-sidebar__tab"
+        onClick={() => setCollapsed((c) => !c)}
+        aria-label={collapsed ? 'open terminal' : 'close terminal'}
+        title={collapsed ? 'open terminal' : 'close terminal'}
+      >
+        {collapsed ? '>_' : '×'}
+      </button>
+
+      <div
+        className="termi"
+        aria-label="interactive terminal"
+        onClick={() => inputRef.current?.focus()}
+      >
+        <div className="termi__head">
+          <span className="termi__dot"></span>
+          <span>
+            {promptPath} &mdash;{' '}
+            {inGame
+              ? <>text adventure · type <span className="kw">help</span></>
+              : <>type a command · try <span className="kw">help</span></>
+            }
+          </span>
+          <button
+            type="button"
+            className="termi__close"
+            onClick={(e) => { e.stopPropagation(); setCollapsed(true) }}
+            aria-label="close terminal"
+          >
+            ×
+          </button>
+        </div>
+        <div className="termi__log" ref={logRef}>
+          {lines.map((line) => (
+            <div key={line.id} className="line" dangerouslySetInnerHTML={{ __html: line.html }} />
+          ))}
+        </div>
+        <form className="termi__input" onSubmit={handleSubmit} autoComplete="off">
+          <span className="p">{promptPath} $</span>
+          <input
+            ref={inputRef}
+            id="termiCmd"
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            spellCheck={false}
+            autoCapitalize="off"
+            aria-label="terminal command"
+          />
+          <span className="caret"></span>
+        </form>
       </div>
-      <div className="termi__log" ref={logRef}>
-        {lines.map((line) => (
-          <div key={line.id} className="line" dangerouslySetInnerHTML={{ __html: line.html }} />
-        ))}
-      </div>
-      <form className="termi__input" onSubmit={handleSubmit} autoComplete="off">
-        <span className="p">~ $</span>
-        <input
-          ref={inputRef}
-          id="termiCmd"
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          spellCheck={false}
-          autoCapitalize="off"
-          aria-label="terminal command"
-        />
-        <span className="caret"></span>
-      </form>
-    </div>
+    </aside>
   )
 }

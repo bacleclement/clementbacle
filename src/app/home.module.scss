@@ -9,8 +9,8 @@
   padding: var(--s-10) 0 var(--s-9);
   position: relative;
 }
-/* Everything except the fog canvas stacks above it */
-.hero > *:not(:global(.hero__fog)) {
+/* Shell div stacks above the fog canvas */
+.hero > :global(.shell) {
   position: relative;
   z-index: 1;
 }
