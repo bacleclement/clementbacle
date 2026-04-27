@@ -3,6 +3,7 @@ import { Newsreader, JetBrains_Mono, Geist } from "next/font/google";
 import "./globals.scss";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import ClementBanner from "@/components/ClementBanner";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
@@ -42,6 +43,7 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </div>
+        <ClementBanner />
       </body>
     </html>
   );
