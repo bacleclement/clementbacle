@@ -1,0 +1,165 @@
+@import "tailwindcss/index.css";
+
+/* ============================================================
+   Programmer's Press — Design Tokens (verbatim from _handoff/tokens.css)
+   ============================================================ */
+
+/* Dark warm (default) */
+:root {
+  --bg: #0F0F12;
+  --bg-elev: #16161A;
+  --bg-code: #0A0A0D;
+  --fg: #F2EBDD;
+  --fg-soft: #C9C2B4;
+  --muted: #8A857A;
+  --rule: #2A2925;
+  --accent: #E84A2E;
+
+  /* Cover palette */
+  --c-brick:    #E84A2E;
+  --c-ocher:    #D4A23A;
+  --c-prussian: #2A4A6B;
+  --c-forest:   #2D4A3E;
+  --c-plum:     #6B3A4E;
+
+  /* Type families */
+  --serif: "Newsreader", "Source Serif 4", Georgia, serif;
+  --sans:  "Geist", "Inter", system-ui, sans-serif;
+  --mono:  "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Spacing (8px base, editorial generous) */
+  --s-1: 4px;   --s-2: 8px;   --s-3: 12px;  --s-4: 16px;
+  --s-5: 24px;  --s-6: 32px;  --s-7: 48px;  --s-8: 64px;
+  --s-9: 96px;  --s-10: 128px;
+
+  /* Type scale */
+  --t-meta: 12px;
+  --t-body: 17px;
+  --t-lede: 21px;
+  --t-h3:   24px;
+  --t-h2:   36px;
+  --t-h1:   clamp(48px, 8vw, 96px);
+  --measure: 65ch;
+  --radius: 2px;
+}
+
+/* Light theme */
+[data-theme="light"] {
+  --bg: #EFE8D8;
+  --bg-elev: #E6DFCD;
+  --bg-code: #1F1D1A;
+  --fg: #1F1D1A;
+  --fg-soft: #3B3833;
+  --muted: #6F6A5E;
+  --rule: #D2C9B5;
+  --accent: #C03A20;
+}
+
+/* Easter egg: CRT phosphor mode */
+[data-theme="clement"] {
+  --bg: #06140A;
+  --bg-elev: #0A1F10;
+  --bg-code: #03100A;
+  --fg: #B8FFC8;
+  --fg-soft: #6FE89A;
+  --muted: #3FAA66;
+  --rule: #154A28;
+  --accent: #2BFF6E;
+  --c-brick:    #2BFF6E;
+  --c-ocher:    #BFFF6A;
+  --c-prussian: #1B6E54;
+  --c-forest:   #0F4A2A;
+  --c-plum:     #2D804E;
+}
+
+/* ============================================================
+   Tailwind v4 — static theme tokens
+   Override defaults: colors and spacing replaced entirely.
+   ============================================================ */
+@theme {
+  /* Remove all Tailwind default colors */
+  --color-#{'*'}: initial;
+
+  /* Remove Tailwind default spacing scale */
+  --spacing-#{'*'}: initial;
+
+  /* Spacing scale — 10 steps, 4px base */
+  --spacing-1:  4px;
+  --spacing-2:  8px;
+  --spacing-3:  12px;
+  --spacing-4:  16px;
+  --spacing-5:  24px;
+  --spacing-6:  32px;
+  --spacing-7:  48px;
+  --spacing-8:  64px;
+  --spacing-9:  96px;
+  --spacing-10: 128px;
+
+  /* Font sizes */
+  --text-meta: 12px;
+  --text-body: 17px;
+  --text-lede: 21px;
+  --text-h3:   24px;
+  --text-h2:   36px;
+
+  /* Border radius */
+  --radius-DEFAULT: 2px;
+}
+
+/* ============================================================
+   Tailwind v4 — dynamic color tokens (theme-switchable via [data-theme])
+   Uses @theme inline so var() is resolved at runtime.
+   ============================================================ */
+@theme inline {
+  /* Font families — resolved at runtime via next/font CSS variables */
+  --font-serif: var(--font-newsreader), "Source Serif 4", Georgia, serif;
+  --font-sans:  var(--font-geist), "Inter", system-ui, sans-serif;
+  --font-mono:  var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  --color-bg:       var(--bg);
+  --color-bg-elev:  var(--bg-elev);
+  --color-bg-code:  var(--bg-code);
+  --color-fg:       var(--fg);
+  --color-fg-soft:  var(--fg-soft);
+  --color-muted:    var(--muted);
+  --color-rule:     var(--rule);
+  --color-accent:   var(--accent);
+  --color-brick:    var(--c-brick);
+  --color-ocher:    var(--c-ocher);
+  --color-prussian: var(--c-prussian);
+  --color-forest:   var(--c-forest);
+  --color-plum:     var(--c-plum);
+}
+
+/* ============================================================
+   Base document styles (from _handoff/tokens.css)
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+html {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-serif);
+  font-size: var(--t-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.95  0 0 0 0 0.92  0 0 0 0 0.86  0 0 0 0.05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: 240px 240px;
+}
+
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--accent); }
+
+::selection { background: var(--accent); color: var(--bg); }
+
+.shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 var(--s-6);
+}
