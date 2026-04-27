@@ -1,4 +1,5 @@
 import Link from "next/link";
+import NavTools from "@/components/NavTools";
 
 export default function Nav() {
   return (
@@ -12,10 +13,7 @@ export default function Nav() {
         <Link className="nav-link" href="/projects">~/projects</Link>
         <Link className="nav-link" href="/about">~/about</Link>
       </div>
-      <div className="nav__tools">
-        <button className="icon-btn" id="lang">FR · en</button>
-        <button className="icon-btn" id="theme" title="Toggle theme">◐ dark</button>
-      </div>
+      <NavTools />
     </nav>
   );
 }
