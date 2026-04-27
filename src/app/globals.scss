@@ -95,11 +95,6 @@
   --spacing-9:  96px;
   --spacing-10: 128px;
 
-  /* Font families (placeholders — replaced by next/font variables in US-2) */
-  --font-serif: "Newsreader", "Source Serif 4", Georgia, serif;
-  --font-sans:  "Geist", "Inter", system-ui, sans-serif;
-  --font-mono:  "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
-
   /* Font sizes */
   --text-meta: 12px;
   --text-body: 17px;
@@ -116,6 +111,11 @@
    Uses @theme inline so var() is resolved at runtime.
    ============================================================ */
 @theme inline {
+  /* Font families — resolved at runtime via next/font CSS variables */
+  --font-serif: var(--font-newsreader), "Source Serif 4", Georgia, serif;
+  --font-sans:  var(--font-geist), "Inter", system-ui, sans-serif;
+  --font-mono:  var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
   --color-bg:       var(--bg);
   --color-bg-elev:  var(--bg-elev);
   --color-bg-code:  var(--bg-code);
