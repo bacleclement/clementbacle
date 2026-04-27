@@ -1,0 +1,234 @@
+/* ============================================================
+   About page — page-specific styles
+   ============================================================ */
+
+.aboutHead {
+  padding: var(--s-9) 0 var(--s-7);
+  border-bottom: 1px solid var(--rule);
+
+  h1 {
+    font-size: clamp(36px, 5.5vw, 64px);
+    margin: 0 0 var(--s-5);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    max-width: 16ch;
+    em { font-style: italic; color: var(--accent); }
+  }
+}
+
+.lede {
+  font-size: 22px;
+  max-width: 50ch;
+}
+
+.bio {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: var(--s-9);
+  padding: var(--s-9) 0;
+  border-bottom: 1px solid var(--rule);
+
+  p {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.65;
+    margin: 0 0 var(--s-5);
+    max-width: 60ch;
+  }
+
+  @media (max-width: 800px) { grid-template-columns: 1fr; }
+}
+
+.bioMeta {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+
+  b {
+    color: var(--fg);
+    font-weight: 400;
+    display: block;
+    margin-bottom: 4px;
+    margin-top: var(--s-4);
+    &:first-child { margin-top: 0; }
+  }
+}
+
+.stackBlock {
+  padding: var(--s-9) 0;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: var(--s-7);
+
+  h2 {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 32px;
+    color: var(--muted);
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  @media (max-width: 800px) { grid-template-columns: 1fr; }
+}
+
+.stackCols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-6);
+
+  h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0 0 var(--s-3);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+
+  ul { list-style: none; padding: 0; margin: 0; }
+
+  li {
+    font-family: var(--serif);
+    font-size: 17px;
+    padding: 4px 0;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    &:first-child { border-top: 0; }
+
+    i { font-family: var(--mono); font-size: 10px; color: var(--muted); font-style: normal; }
+  }
+
+  @media (max-width: 800px) { grid-template-columns: 1fr; }
+}
+
+.reading {
+  padding: var(--s-9) 0;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: var(--s-7);
+
+  h2 {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 32px;
+    color: var(--muted);
+    font-weight: 500;
+    margin: 0;
+  }
+
+  @media (max-width: 800px) { grid-template-columns: 1fr; }
+}
+
+.books {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s-5);
+
+  @media (max-width: 800px) { grid-template-columns: repeat(2, 1fr); }
+}
+
+.book {
+  display: grid;
+  gap: var(--s-2);
+
+  :global(.cover)         { aspect-ratio: 2/3; padding: var(--s-3); }
+  :global(.cover__title)  { font-size: 14px; line-height: 1.15; }
+  :global(.cover__num)    { font-size: 9px; }
+  :global(.cover__foot)   { font-size: 9px; }
+}
+
+.bookAuthor { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--fg-soft); }
+.bookMeta   { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+
+.portraitBlock {
+  padding: var(--s-9) 0;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: var(--s-7);
+  align-items: end;
+
+  @media (max-width: 800px) { grid-template-columns: 1fr; }
+}
+
+.portrait {
+  aspect-ratio: 4/5;
+  background:
+    repeating-linear-gradient(45deg, transparent 0 8px, rgba(232,74,46,0.04) 8px 9px),
+    linear-gradient(180deg, var(--c-prussian), #1A2C3E);
+  position: relative;
+  border: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  &::before {
+    content: "[ portrait · n&b · duotone accent ]";
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.04em;
+  }
+}
+
+.portraitFrame {
+  position: absolute;
+  inset: 16px;
+  border: 1px solid rgba(255,255,255,0.15);
+  pointer-events: none;
+}
+
+.portraitId {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+}
+
+.quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 26px;
+  line-height: 1.35;
+  color: var(--fg);
+  max-width: 28ch;
+
+  cite {
+    display: block;
+    margin-top: var(--s-5);
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+}
+
+.contactRow {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  padding: var(--s-5) 0;
+  display: flex;
+  gap: var(--s-5);
+  flex-wrap: wrap;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  margin-top: var(--s-7);
+
+  b { color: var(--fg); font-weight: 400; }
+}
+
+.obf {
+  font-family: var(--mono);
+  &::before { content: "clement"; }
+  &::after  { content: "bacle.dev"; }
+  .at::before { content: " [at] "; color: var(--accent); }
+}
