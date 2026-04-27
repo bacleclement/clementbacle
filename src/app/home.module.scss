@@ -1,0 +1,226 @@
+/* ============================================================
+   Home page — page-specific styles
+   Note: .hero__fog, .termi*, .clement-banner are global
+   (used by HeroFog / Terminal / ClementBanner components).
+   ============================================================ */
+
+/* ===== Hero ===== */
+.hero {
+  padding: var(--s-10) 0 var(--s-9);
+  position: relative;
+}
+/* Shell div stacks above the fog canvas */
+.hero > :global(.shell) {
+  position: relative;
+  z-index: 1;
+}
+
+.hero__eyebrow {
+  font-family: var(--mono);
+  font-size: var(--t-meta);
+  color: var(--muted);
+  margin-bottom: var(--s-6);
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 50% { opacity: 0.4; } }
+
+.hero__title {
+  font-family: var(--serif);
+  font-size: clamp(56px, 9.5vw, 116px);
+  font-weight: 600;
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+  margin: 0 0 var(--s-6);
+  max-width: 14ch;
+
+  em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 600;
+  }
+}
+
+.hero__sub {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--muted);
+
+  b { color: var(--fg); font-weight: 400; }
+}
+
+.hero__meta {
+  margin-top: var(--s-9);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s-5);
+  border-top: 1px solid var(--rule);
+  padding-top: var(--s-5);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+
+  .k {
+    color: var(--fg);
+    display: block;
+    margin-bottom: 4px;
+  }
+}
+@media (max-width: 700px) {
+  .hero__meta { grid-template-columns: 1fr 1fr; }
+}
+
+/* ===== Static decorative terminal ===== */
+.term {
+  margin-top: var(--s-6);
+  background: var(--bg-elev);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: var(--s-4) var(--s-5);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--fg-soft);
+  max-width: 520px;
+
+  /* Utility color helpers used inside this block */
+  :global(.p) { color: var(--muted); }
+  :global(.a) { color: var(--accent); }
+  :global(.o) { color: var(--fg); }
+}
+
+/* ===== Section header ===== */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--s-6);
+
+  h2 {
+    font-size: var(--t-h2);
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+
+    em { font-style: italic; color: var(--muted); font-weight: 500; }
+  }
+
+  .more {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+
+    &::after {
+      content: " →";
+      transition: transform .15s ease;
+      display: inline-block;
+    }
+    &:hover { color: var(--accent); }
+    &:hover::after { transform: translateX(3px); }
+  }
+}
+
+/* ===== Writing grid ===== */
+.writing-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: var(--s-6);
+  align-items: start;
+
+  :global(.card.lg) :global(.card__title) { font-size: 30px; line-height: 1.15; }
+}
+@media (max-width: 900px) {
+  .writing-grid {
+    grid-template-columns: 1fr 1fr;
+    :global(.card.lg) { grid-column: 1 / -1; }
+  }
+}
+@media (max-width: 540px) {
+  .writing-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== Pull quote ===== */
+.pull {
+  border-left: 2px solid var(--accent);
+  padding: var(--s-2) 0 var(--s-2) var(--s-5);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--fg-soft);
+  margin: var(--s-7) 0;
+  max-width: 56ch;
+
+  cite {
+    display: block;
+    margin-top: var(--s-3);
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+}
+
+/* ===== Selected work table ===== */
+.work { margin-top: var(--s-6); }
+
+.work__row {
+  display: grid;
+  grid-template-columns: 80px 1.4fr 2fr 0.8fr 80px;
+  gap: var(--s-5);
+  padding: var(--s-5) 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: baseline;
+  font-size: 15px;
+  text-decoration: none;
+  color: inherit;
+  transition: background .15s ease, padding-left .15s ease;
+
+  &:first-child { border-top: 1px solid var(--rule); }
+  &:hover { padding-left: 12px; }
+  &:hover .work__name { color: var(--accent); }
+}
+
+.work__num  { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.work__name { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+.work__desc { font-family: var(--serif); color: var(--fg-soft); font-style: italic; font-size: 16px; }
+.work__stack { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.work__year  { font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: right; }
+
+@media (max-width: 800px) {
+  .work__row { grid-template-columns: 50px 1fr; row-gap: 4px; }
+  .work__desc, .work__stack, .work__year { grid-column: 2; }
+}
+
+/* ===== CRT phosphor mode overrides for scoped classes ===== */
+:global([data-theme="clement"]) {
+  .hero__title {
+    font-family: var(--mono) !important;
+    font-style: normal !important;
+    letter-spacing: 0;
+    text-shadow: 0 0 8px rgba(43, 255, 110, 0.55);
+  }
+  .hero__title em { font-style: normal !important; }
+
+  .work__name {
+    font-family: var(--mono) !important;
+    font-style: normal !important;
+    letter-spacing: 0;
+    text-shadow: 0 0 8px rgba(43, 255, 110, 0.55);
+  }
+
+  .pull {
+    font-family: var(--mono) !important;
+    font-style: normal !important;
+    letter-spacing: 0;
+    text-shadow: 0 0 8px rgba(43, 255, 110, 0.55);
+  }
+}
