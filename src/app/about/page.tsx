@@ -35,7 +35,7 @@ export default function AboutPage() {
       <section className={styles.bio}>
         <div>
           <p className="dropcap">
-            I started writing code in 2017, in a room in Lille, after five years of pharmacy
+            I started writing code in 2017, in a room in Lille, after six years of pharmacy
             school and a doctorate thesis on building a health startup. Le Wagon happened next.
             I never looked back. The pharmacist certificate is still in a drawer somewhere &mdash;
             it comes in handy when colleagues describe their health problems in the office.
