@@ -4,7 +4,14 @@ import { getArticles, type Article } from '@/lib/articles'
 import styles from './writing.module.scss'
 
 export const metadata: Metadata = {
-  title: 'Writing — Clément Bacle',
+  title: 'Writing',
+  description: 'Essays at the intersection of software engineering, entrepreneurship, and AI workflows — from architecture to business strategy.',
+  alternates: { canonical: 'https://clementbacle.dev/writing' },
+  openGraph: {
+    title: 'Writing — Clément Bacle',
+    description: 'Essays at the intersection of software engineering, entrepreneurship, and AI workflows.',
+    url: 'https://clementbacle.dev/writing',
+  },
 }
 
 function formatDate(iso: string): string {

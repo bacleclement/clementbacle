@@ -2,7 +2,14 @@ import type { Metadata } from 'next'
 import styles from './about.module.scss'
 
 export const metadata: Metadata = {
-  title: 'About — Clément Bacle',
+  title: 'About',
+  description: 'Senior fullstack engineer, ex-founder (Oscare, 12 people, exited). Currently at Hublo. Writing about software, AI, and entrepreneurship.',
+  alternates: { canonical: 'https://clementbacle.dev/about' },
+  openGraph: {
+    title: 'About — Clément Bacle',
+    description: 'Senior fullstack engineer, ex-founder (Oscare, 12 people, exited). Currently at Hublo.',
+    url: 'https://clementbacle.dev/about',
+  },
 }
 
 export default function AboutPage() {

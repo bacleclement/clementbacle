@@ -2,7 +2,14 @@ import type { Metadata } from 'next'
 import styles from './projects.module.scss'
 
 export const metadata: Metadata = {
-  title: 'Projects — Clément Bacle',
+  title: 'Projects',
+  description: 'Selected projects: Kitt (AI workflow engine), ClaudIn (open-source LinkedIn automation), Hive (NestJS multi-agent framework).',
+  alternates: { canonical: 'https://clementbacle.dev/projects' },
+  openGraph: {
+    title: 'Projects — Clément Bacle',
+    description: 'Selected projects: Kitt, ClaudIn, Hive — AI tooling and workflow engines.',
+    url: 'https://clementbacle.dev/projects',
+  },
 }
 
 export default function ProjectsPage() {

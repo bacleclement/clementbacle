@@ -14,7 +14,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const article = await getArticle(slug)
   if (!article) return {}
-  return { title: `${article.title} — Clément Bacle` }
+  const url = `https://clementbacle.dev/article/${slug}`
+  return {
+    title: article.title,
+    description: article.excerpt,
+    alternates: { canonical: url },
+    openGraph: {
+      type: 'article',
+      url,
+      title: article.title,
+      description: article.excerpt,
+      publishedTime: article.date_written,
+      authors: ['Clément Bacle'],
+      images: [{ url: `/article/${slug}/opengraph-image`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.excerpt,
+      images: [`/article/${slug}/opengraph-image`],
+    },
+  }
 }
 
 function formatDate(iso: string): string {

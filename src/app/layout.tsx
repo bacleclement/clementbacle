@@ -26,10 +26,35 @@ export const viewport: Viewport = {
   themeColor: "#0F0F12",
 }
 
+const BASE = 'https://clementbacle.dev'
+
 export const metadata: Metadata = {
-  title: "Clément Bacle — Programmer's Press",
+  metadataBase: new URL(BASE),
+  title: {
+    default: "Clément Bacle — Software Engineer & AI Builder",
+    template: "%s — Clément Bacle",
+  },
   description:
-    "Personal site of Clément Bacle. Building AI agents, writing about what works.",
+    "Senior fullstack engineer and ex-founder writing about software, AI workflows, and entrepreneurship. Based in Lille, France.",
+  openGraph: {
+    type: 'website',
+    locale: 'fr_FR',
+    url: BASE,
+    siteName: 'Clément Bacle',
+    title: "Clément Bacle — Software Engineer & AI Builder",
+    description:
+      "Senior fullstack engineer and ex-founder writing about software, AI workflows, and entrepreneurship.",
+    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    creator: '@clementbacle',
+    title: "Clément Bacle — Software Engineer & AI Builder",
+    description:
+      "Senior fullstack engineer and ex-founder writing about software, AI workflows, and entrepreneurship.",
+    images: ['/opengraph-image'],
+  },
+  alternates: { canonical: BASE },
 };
 
 export default function RootLayout({
