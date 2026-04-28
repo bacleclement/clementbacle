@@ -274,7 +274,7 @@ export default function Terminal() {
   return (
     <aside
       className={`termi-sidebar${collapsed ? ' termi-sidebar--collapsed' : ''}`}
-      style={{ top: navH }}
+      style={{ top: navH, height: `calc(100dvh - ${navH}px - var(--banner-h, 0px))` }}
     >
       <button
         className="termi-sidebar__tab"

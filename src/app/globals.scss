@@ -45,6 +45,7 @@
 
 /* Light theme */
 [data-theme="light"] {
+  color-scheme: light;
   --bg: #EFE8D8;
   --bg-elev: #E6DFCD;
   --bg-code: #1F1D1A;
@@ -139,6 +140,7 @@ html, body { margin: 0; padding: 0; }
 
 html {
   background: var(--bg);
+  color-scheme: dark;
   color: var(--fg);
   font-family: var(--font-serif);
   font-size: var(--t-body);
@@ -542,7 +544,6 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -0.01e
 .termi-sidebar {
   position: fixed;
   right: 0;
-  bottom: var(--banner-h, 0px);
   width: 300px;
   z-index: 40;
   display: flex;

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Newsreader, JetBrains_Mono, Geist } from "next/font/google";
 import "./globals.scss";
 import Nav from "@/components/Nav";
@@ -21,6 +21,10 @@ const geist = Geist({
   variable: "--font-geist",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  themeColor: "#0F0F12",
+}
 
 export const metadata: Metadata = {
   title: "Clément Bacle — Programmer's Press",
