@@ -35,21 +35,21 @@ export default function AboutPage() {
       <section className={styles.bio}>
         <div>
           <p className="dropcap">
-            I started writing JavaScript in 2014, in a school in Lille, on a laptop that
-            couldn&apos;t run Photoshop. By 2018 I was the front-end half of a small startup;
-            by 2021 it had twelve employees and I&apos;d accidentally become a manager. We
-            sold the company in 2023, and I kept the parts of the work I&apos;d actually liked
-            — shipping things, writing about them, getting opinions wrong in public.
+            I started writing code in 2017, in a room in Lille, after five years of pharmacy
+            school and a doctorate thesis on building a health startup. Le Wagon happened next.
+            I never looked back. The pharmacist certificate is still in a drawer somewhere &mdash;
+            it comes in handy when colleagues describe their health problems in the office.
           </p>
           <p>
-            Today I build front-ends and NestJS services at <b style={{ color: 'var(--fg)' }}>Hublo</b>, the french
-            healthtech platform that connects hospitals and care homes to a network of
-            flexible medical staff &mdash; nurses, caregivers, midwives. ~700k professionals
-            on the platform; the alternative our establishments are escaping is, literally,
-            the fax machine. Before that I co-founded <b style={{ color: 'var(--fg)' }}>Oscare</b>, a tool that pulled
-            structured intelligence (officers, capital, beneficial owners, filings) on french
-            companies from open data &mdash; SIRET, INPI, Pappers, INSEE. On the side I work
-            on agents — voice, text, MCP — and write essais about what survives contact with
+            Today I build front-ends and NestJS services at <b style={{ color: 'var(--fg)' }}>Hublo</b>, the French
+            healthtech that connects hospitals and care homes to flexible medical staff &mdash;
+            nurses, caregivers, midwives. Before that I co-founded <b style={{ color: 'var(--fg)' }}>Oscare</b>, a care
+            pathway planning platform for French hospitals &mdash; raised €1M in 2021, shipped
+            to 30+ establishments, 60,000 patients, 2,000 professionals, eleven people.
+            Before that, <b style={{ color: 'var(--fg)' }}>Officina Santé</b>: a sleep clinic app built with a
+            somnologist at the CHR de Lille, a clinical study filed, and a book published with
+            Dr.&nbsp;Chapelle &mdash; <i>Faites de beaux rêves</i> (Dunod, 2019). On the side I work
+            on agents &mdash; voice, text, MCP &mdash; and write about what survives contact with
             production.
           </p>
           <p>
@@ -67,9 +67,10 @@ export default function AboutPage() {
         <aside className={styles.bioMeta}>
           <b>based</b>Lille, FR
           <b>at</b>Hublo (healthtech) · 2024 →
-          <b>before</b>Co-founder, Oscare · 2018–2023
-          <b>education</b>HEI Lille, dipl. 2015
-          <b>writing</b>23 essays · since 2021
+          <b>before</b>Co-founder &amp; CPO, Oscare · 2019–2024
+          <b>education</b>Doctorat Pharmacie, Lille 2 · 2015 / Le Wagon · 2017
+          <b>published</b>Faites de beaux rêves · Dunod 2019
+          <b>writing</b>4 essays · since 2025
           <b>shipping</b>4 projects active
           <b>speaking</b>fr · en
           <b>not</b>available for freelance
