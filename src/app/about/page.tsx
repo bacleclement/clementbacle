@@ -41,7 +41,7 @@ export default function AboutPage() {
             it comes in handy when colleagues describe their health problems in the office.
           </p>
           <p>
-            Today I build front-ends and NestJS services at <b style={{ color: 'var(--fg)' }}>Hublo</b>, the French
+            Today, I&apos;m a fullstack senior engineer at <b style={{ color: 'var(--fg)' }}>Hublo</b>, the French
             healthtech that connects hospitals and care homes to flexible medical staff &mdash;
             nurses, caregivers, midwives. Before that I co-founded <b style={{ color: 'var(--fg)' }}>Oscare</b>, a care
             pathway planning platform for French hospitals &mdash; raised €1M in 2021, shipped
@@ -57,11 +57,6 @@ export default function AboutPage() {
             what I publish here started as a Notion page, lost a third of its words, and
             became something I&apos;d let a friend read. I prefer pieces that are wrong but
             specific to pieces that are vague but&nbsp;safe.
-          </p>
-          <p>
-            If you&apos;ve read this far, you probably want to know what I&apos;m not. I&apos;m not a
-            consultant. This site is not a sales page. There is no &ldquo;hire me&rdquo; button at
-            the bottom of this paragraph, on purpose.
           </p>
         </div>
         <aside className={styles.bioMeta}>
