@@ -16,11 +16,11 @@ export default function HomePage() {
           </div>
 
           <h1 className={styles.hero__title}>
-            I build <em>AI&nbsp;agents</em>
+            I build software
             <br />
-            and write about
+            and <em>AI&nbsp;workflows</em> —
             <br />
-            what actually works.
+            then write about both.
           </h1>
 
           <p className={styles.hero__sub}>

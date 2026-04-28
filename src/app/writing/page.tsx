@@ -46,11 +46,12 @@ export default function WritingPage() {
           <div className="eyebrow" style={{ marginBottom: 'var(--s-5)' }}>
             ~/writing &mdash; {articles.length} essay{articles.length !== 1 ? 's' : ''} · 2021–2026
           </div>
-          <h1>Notes from <em>shipping</em><br />agents in production.</h1>
+          <h1>On software, <em>business</em><br />and AI.</h1>
         </div>
         <p className={styles.lede}>
-          Long-form essais on AI agents, context engineering, MCP, NestJS,
-          and the long bumpy road from &ldquo;demo&rdquo; to &ldquo;actually used by people who pay.&rdquo;
+          Essays at the intersection of software engineering,
+          entrepreneurship, and AI workflows &mdash; from architecture
+          to business strategy.
         </p>
       </header>
 
@@ -77,13 +78,16 @@ export default function WritingPage() {
         </section>
       )}
 
-      {/* ── Filter bar (static — search/filter P2) ─────────── */}
+      {/* ── Category filter bar ─────────────────────────────── */}
       <div className={styles.filterbar}>
         <div className={styles.tagsRow}>
           <span className="tag is-active">all · {articles.length}</span>
-          {Array.from(new Set(articles.flatMap(a => a.tags))).slice(0, 6).map(tag => (
-            <span key={tag} className="tag">{tag}</span>
-          ))}
+          {(['business', 'ai', 'software', 'tech'] as const).map(cat => {
+            const count = articles.filter(a => a.category === cat).length
+            return count > 0 ? (
+              <span key={cat} className="tag">{cat} · {count}</span>
+            ) : null
+          })}
         </div>
       </div>
 
@@ -106,7 +110,10 @@ export default function WritingPage() {
                     <span className={styles.entrySwatch} style={{ background: COLOR_VAR[a.coverColor] }}></span>
                     {a.title}
                   </div>
-                  <div className={styles.entryTags}>{a.tags.slice(0, 3).join(' · ')}</div>
+                  <div className={styles.entryTags}>
+                    {a.category && <span className={styles.entryCat}>{a.category}</span>}
+                    {a.tags.slice(0, 2).join(' · ')}
+                  </div>
                   <div className={styles.entryRead}>{a.readingTime} min</div>
                 </Link>
               )

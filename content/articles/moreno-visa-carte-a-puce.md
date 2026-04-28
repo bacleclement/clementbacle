@@ -5,6 +5,7 @@ language: fr
 status: published
 date_written: 2026-04-26
 word_count: ~950
+category: business
 tags: [france, invention, visa, moat, distribution, serie-inventions-francaises]
 series: "Les inventions françaises que le monde a pris sans payer — Part 1/3"
 sources_factuelles:

@@ -7,6 +7,8 @@ import remarkHtml from 'remark-html'
 
 const ARTICLES_DIR = path.join(process.cwd(), 'content/articles')
 
+export type Category = 'business' | 'ai' | 'software' | 'tech'
+
 export interface Article {
   slug: string
   title: string
@@ -14,6 +16,7 @@ export interface Article {
   language: 'fr' | 'en'
   status: string
   tags: string[]
+  category?: Category
   series?: string
   sources_factuelles?: string[]
   word_count?: string
@@ -63,6 +66,7 @@ export function getArticles(): Article[] {
         language: data.language ?? 'fr',
         status: data.status ?? '',
         tags: data.tags ?? [],
+        category: data.category,
         series: data.series,
         sources_factuelles: data.sources_factuelles,
         word_count: data.word_count,
@@ -99,6 +103,7 @@ export async function getArticle(slug: string): Promise<ArticleFull | null> {
     language: data.language ?? 'fr',
     status: data.status ?? '',
     tags: data.tags ?? [],
+    category: data.category,
     series: data.series,
     sources_factuelles: data.sources_factuelles,
     word_count: data.word_count,
