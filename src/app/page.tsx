@@ -1,8 +1,16 @@
 import Link from 'next/link'
 import HeroFog from '@/components/HeroFog'
+import { getArticles } from '@/lib/articles'
 import styles from './home.module.scss'
 
+function compactDate(iso: string): string {
+  const [y, m, d] = iso.split('-')
+  const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
+  return `${parseInt(d)}·${months[parseInt(m)-1]}·${y.slice(2)}`
+}
+
 export default function HomePage() {
+  const latest = getArticles().slice(0, 3)
   return (
     <>
       {/* ===================================================== HERO */}
@@ -59,66 +67,29 @@ export default function HomePage() {
         </div>
 
         <div className={styles['writing-grid']}>
-          <Link className="card lg" href="/writing">
-            <div className="card__cover">
-              <div className="cover brick">
-                <div className="cover__num">№ 023</div>
-                <div>
-                  <div className="cover__title">Context engineering, not&nbsp;prompt engineering.</div>
+          {latest.map((a, i) => {
+            const num = String(getArticles().length - i).padStart(3, '0')
+            return (
+              <Link key={a.slug} className={i === 0 ? 'card lg' : 'card'} href={`/article/${a.slug}`}>
+                <div className="card__cover">
+                  <div className={`cover ${a.coverColor}`}>
+                    <div className="cover__num">№ {num}</div>
+                    <div><div className="cover__title">{a.title}</div></div>
+                    <div className="cover__foot">
+                      <span>{a.category ?? 'essai'} · {a.language}</span>
+                      <span>{compactDate(a.date_written)}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="cover__foot">
-                  <span>essai · fr</span>
-                  <span>14·apr·26</span>
+                <div className="card__title">{a.title}</div>
+                <div className="card__meta">
+                  <span>{compactDate(a.date_written).replace(/·/g, ' ')}</span>
+                  <span>·</span>
+                  <span>{a.readingTime} min</span>
                 </div>
-              </div>
-            </div>
-            <div className="card__title">Context engineering, not prompt engineering</div>
-            <div className="card__meta">
-              <span>14 apr 2026</span>
-              <span>·</span>
-              <span>14 min read</span>
-              <span>·</span>
-              <span>fr · en</span>
-            </div>
-          </Link>
-
-          <Link className="card" href="/writing">
-            <div className="card__cover">
-              <div className="cover prussian">
-                <div className="cover__num">№ 022</div>
-                <div><div className="cover__title">MCP is the <i>USB-C</i> of LLM tools.</div></div>
-                <div className="cover__foot">
-                  <span>essai · fr</span>
-                  <span>02·apr·26</span>
-                </div>
-              </div>
-            </div>
-            <div className="card__title">MCP is the USB-C of LLM tools</div>
-            <div className="card__meta">
-              <span>02 apr 2026</span>
-              <span>·</span>
-              <span>9 min</span>
-            </div>
-          </Link>
-
-          <Link className="card" href="/writing">
-            <div className="card__cover">
-              <div className="cover ocher">
-                <div className="cover__num">№ 021</div>
-                <div><div className="cover__title">A NestJS module<br />for agent tools.</div></div>
-                <div className="cover__foot">
-                  <span>note · en</span>
-                  <span>21·mar·26</span>
-                </div>
-              </div>
-            </div>
-            <div className="card__title">A NestJS module for agent tools</div>
-            <div className="card__meta">
-              <span>21 mar 2026</span>
-              <span>·</span>
-              <span>6 min</span>
-            </div>
-          </Link>
+              </Link>
+            )
+          })}
         </div>
       </section>
 
