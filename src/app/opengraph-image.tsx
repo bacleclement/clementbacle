@@ -28,7 +28,7 @@ export default function Image() {
             marginBottom: 48,
           }}
         >
-          clementbacle.dev
+          clementbacle.com
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center' }}>
           <div

@@ -55,7 +55,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             </div>
           ) : null}
           <div style={{ display: 'flex', color: '#636059', fontSize: 12, fontFamily: 'monospace', letterSpacing: '0.08em' }}>
-            clementbacle.dev
+            clementbacle.com
           </div>
         </div>
 

@@ -123,7 +123,7 @@ export default function Terminal() {
       out('<span class="dim">ten years shipping web. ex-founder (12 ppl). currently at hublo (healthtech).</span>')
     },
     contact: () => {
-      out('email · <span class="kw">clement [at] clementbacle.dev</span>')
+      out('email · <span class="kw">clement [at] clementbacle.com</span>')
       out('github · <span class="kw">@clementbacle</span>')
       out('<span class="dim">no DMs about freelance — salarié heureux.</span>')
     },

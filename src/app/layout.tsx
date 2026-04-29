@@ -26,7 +26,7 @@ export const viewport: Viewport = {
   themeColor: "#0F0F12",
 }
 
-const BASE = 'https://clementbacle.dev'
+const BASE = 'https://clementbacle.com'
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE),

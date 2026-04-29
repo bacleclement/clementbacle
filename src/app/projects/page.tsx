@@ -4,11 +4,11 @@ import styles from './projects.module.scss'
 export const metadata: Metadata = {
   title: 'Projects',
   description: 'Selected projects: Kitt (AI workflow engine), ClaudIn (open-source LinkedIn automation), Hive (NestJS multi-agent framework).',
-  alternates: { canonical: 'https://clementbacle.dev/projects' },
+  alternates: { canonical: 'https://clementbacle.com/projects' },
   openGraph: {
     title: 'Projects — Clément Bacle',
     description: 'Selected projects: Kitt, ClaudIn, Hive — AI tooling and workflow engines.',
-    url: 'https://clementbacle.dev/projects',
+    url: 'https://clementbacle.com/projects',
   },
 }
 

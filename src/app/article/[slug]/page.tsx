@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const article = await getArticle(slug)
   if (!article) return {}
-  const url = `https://clementbacle.dev/article/${slug}`
+  const url = `https://clementbacle.com/article/${slug}`
   return {
     title: article.title,
     description: article.excerpt,

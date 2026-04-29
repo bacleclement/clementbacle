@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getArticles } from '@/lib/articles'
 
-const BASE = 'https://clementbacle.dev'
+const BASE = 'https://clementbacle.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const articles = getArticles()
