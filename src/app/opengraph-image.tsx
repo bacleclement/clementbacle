@@ -19,6 +19,7 @@ export default function Image() {
       >
         <div
           style={{
+            display: 'flex',
             color: '#E85C30',
             fontSize: 13,
             fontFamily: 'monospace',
@@ -32,6 +33,8 @@ export default function Image() {
         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center' }}>
           <div
             style={{
+              display: 'flex',
+              flexDirection: 'column',
               color: '#F5F0EB',
               fontSize: 64,
               fontFamily: 'serif',
@@ -39,15 +42,14 @@ export default function Image() {
               marginBottom: 24,
             }}
           >
-            I build software
-            <br />
-            and AI workflows —
-            <br />
-            then write about both.
+            <div style={{ display: 'flex' }}>I build software</div>
+            <div style={{ display: 'flex' }}>and AI workflows —</div>
+            <div style={{ display: 'flex' }}>then write about both.</div>
           </div>
         </div>
         <div
           style={{
+            display: 'flex',
             color: '#636059',
             fontSize: 16,
             fontFamily: 'monospace',

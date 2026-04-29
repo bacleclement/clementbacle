@@ -35,10 +35,12 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           padding: '72px 80px',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 48 }}>
-          {category && (
+        {/* Header row */}
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, marginBottom: 48 }}>
+          {category ? (
             <div
               style={{
+                display: 'flex',
                 color: accent,
                 fontSize: 11,
                 fontFamily: 'monospace',
@@ -51,15 +53,17 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             >
               {category}
             </div>
-          )}
-          <div style={{ color: '#636059', fontSize: 12, fontFamily: 'monospace', letterSpacing: '0.08em' }}>
+          ) : null}
+          <div style={{ display: 'flex', color: '#636059', fontSize: 12, fontFamily: 'monospace', letterSpacing: '0.08em' }}>
             clementbacle.dev
           </div>
         </div>
 
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+        {/* Title */}
+        <div style={{ display: 'flex', flex: 1, alignItems: 'center' }}>
           <div
             style={{
+              display: 'flex',
               color: '#F5F0EB',
               fontSize: title.length > 60 ? 44 : 56,
               fontFamily: 'serif',
@@ -71,22 +75,24 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           </div>
         </div>
 
+        {/* Footer row */}
         <div
           style={{
             display: 'flex',
+            flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
             marginTop: 40,
           }}
         >
-          <div style={{ color: '#636059', fontSize: 14, fontFamily: 'monospace' }}>
+          <div style={{ display: 'flex', color: '#636059', fontSize: 14, fontFamily: 'monospace' }}>
             Clément Bacle
           </div>
-          {readTime > 0 && (
-            <div style={{ color: '#636059', fontSize: 14, fontFamily: 'monospace' }}>
+          {readTime > 0 ? (
+            <div style={{ display: 'flex', color: '#636059', fontSize: 14, fontFamily: 'monospace' }}>
               {readTime} min read
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     ),
