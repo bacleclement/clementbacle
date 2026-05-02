@@ -32,8 +32,8 @@ export default function Terminal() {
   const gameRef = useRef<GameState | null>(null)
 
   useEffect(() => {
-    if (window.innerWidth >= 900) queueMicrotask(() => setCollapsed(false))
-  }, [])
+    if (window.innerWidth >= 900 && !pathname.startsWith('/lab')) queueMicrotask(() => setCollapsed(false))
+  }, [pathname])
 
   useEffect(() => {
     function update() {

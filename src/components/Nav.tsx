@@ -32,6 +32,7 @@ export default function Nav() {
           <Link className="nav-link" href="/" onClick={close}>~/home</Link>
           <Link className="nav-link" href="/writing" onClick={close}>~/writing</Link>
           <Link className="nav-link" href="/projects" onClick={close}>~/projects</Link>
+          <Link className="nav-link" href="/lab" onClick={close}>~/lab</Link>
           <Link className="nav-link" href="/about" onClick={close}>~/about</Link>
         </div>
         <NavTools />
@@ -54,6 +55,7 @@ export default function Nav() {
           <Link className="nav-link" href="/" onClick={close}>~/home</Link>
           <Link className="nav-link" href="/writing" onClick={close}>~/writing</Link>
           <Link className="nav-link" href="/projects" onClick={close}>~/projects</Link>
+          <Link className="nav-link" href="/lab" onClick={close}>~/lab</Link>
           <Link className="nav-link" href="/about" onClick={close}>~/about</Link>
           <div className="nav__drawer-tools">
             <NavTools />

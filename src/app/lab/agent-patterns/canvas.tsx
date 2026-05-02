@@ -359,7 +359,23 @@ export default function Canvas({ nodes, edges, focusedNodeId, animatingEdges, on
 
   const viewBox = `${vb.x} ${vb.y} ${vb.w} ${vb.h}`;
 
+  const zoomIn  = () => setVb(prev => ({ ...prev, w: prev.w * 0.8,  h: prev.h * 0.8  }));
+  const zoomOut = () => setVb(prev => ({ ...prev, w: prev.w * 1.25, h: prev.h * 1.25 }));
+  const fitView = () => {
+    if (!svgRef.current || positioned.length === 0) return;
+    const rect = svgRef.current.getBoundingClientRect();
+    if (rect.width === 0) return;
+    const minX = Math.min(...positioned.map(n => n.x)) - 40;
+    const minY = Math.min(...positioned.map(n => n.y)) - 40;
+    const maxX = Math.max(...positioned.map(n => n.x + n.w)) + 40;
+    const maxY = Math.max(...positioned.map(n => n.y + n.h)) + 40;
+    const cw = maxX - minX, ch = maxY - minY;
+    const scale = Math.min(rect.width / cw, rect.height / ch, 1.2);
+    setVb({ x: minX - (rect.width / scale - cw) / 2, y: minY - (rect.height / scale - ch) / 2, w: rect.width / scale, h: rect.height / scale });
+  };
+
   return (
+    <div className={styles.canvasWrapper}>
     <svg
       ref={svgRef}
       className={styles.canvasSvg}
@@ -592,6 +608,14 @@ export default function Canvas({ nodes, edges, focusedNodeId, animatingEdges, on
 
       {/* Tooltip rendered in SVG foreign object for proper positioning */}
     </svg>
+
+    {/* Zoom controls */}
+    <div className={styles.zoomControls}>
+      <button className={styles.zoomBtn} onClick={zoomIn}  title="Zoom in">+</button>
+      <button className={styles.zoomBtn} onClick={fitView} title="Fit view">⊡</button>
+      <button className={styles.zoomBtn} onClick={zoomOut} title="Zoom out">−</button>
+    </div>
+    </div>
   );
 }
 
