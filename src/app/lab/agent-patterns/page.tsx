@@ -118,6 +118,12 @@ export default function AgentPatternsPage() {
     setClickedNode(null);
   }, [selectedCaseId, layers]);
 
+  // Lock body scroll on this page
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
   // Auto-play step advance
   useEffect(() => {
     if (!playing) {

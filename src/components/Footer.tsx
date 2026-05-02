@@ -1,4 +1,11 @@
+'use client'
+
+import { usePathname } from 'next/navigation'
+
 export default function Footer() {
+  const pathname = usePathname()
+  if (pathname.startsWith('/lab')) return null
+
   return (
     <footer className="footer">
       <div className="shell footer__inner">
@@ -25,5 +32,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  );
+  )
 }
