@@ -23,7 +23,7 @@ const geist = Geist({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#0F0F12",
+  themeColor: "#EFE8D8",
 }
 
 const BASE = 'https://clementbacle.com'
@@ -65,7 +65,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      data-theme="dark"
+      data-theme="light"
       className={`${newsreader.variable} ${jetbrainsMono.variable} ${geist.variable}`}
     >
       <body>

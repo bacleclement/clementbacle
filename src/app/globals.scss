@@ -4,16 +4,17 @@
    Programmer's Press — Design Tokens (verbatim from _handoff/tokens.css)
    ============================================================ */
 
-/* Dark warm (default) */
+/* Light warm (default) */
 :root {
-  --bg: #0F0F12;
-  --bg-elev: #16161A;
-  --bg-code: #0A0A0D;
-  --fg: #F2EBDD;
-  --fg-soft: #C9C2B4;
-  --muted: #8A857A;
-  --rule: #2A2925;
-  --accent: #E84A2E;
+  color-scheme: light;
+  --bg: #EFE8D8;
+  --bg-elev: #E6DFCD;
+  --bg-code: #1F1D1A;
+  --fg: #1F1D1A;
+  --fg-soft: #3B3833;
+  --muted: #6F6A5E;
+  --rule: #D2C9B5;
+  --accent: #C03A20;
 
   /* Cover palette */
   --c-brick:    #E84A2E;
@@ -43,17 +44,17 @@
   --radius: 2px;
 }
 
-/* Light theme */
-[data-theme="light"] {
-  color-scheme: light;
-  --bg: #EFE8D8;
-  --bg-elev: #E6DFCD;
-  --bg-code: #1F1D1A;
-  --fg: #1F1D1A;
-  --fg-soft: #3B3833;
-  --muted: #6F6A5E;
-  --rule: #D2C9B5;
-  --accent: #C03A20;
+/* Dark theme */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0F0F12;
+  --bg-elev: #16161A;
+  --bg-code: #0A0A0D;
+  --fg: #F2EBDD;
+  --fg-soft: #C9C2B4;
+  --muted: #8A857A;
+  --rule: #2A2925;
+  --accent: #E84A2E;
 }
 
 /* Easter egg: CRT phosphor mode */
@@ -140,7 +141,6 @@ html, body { margin: 0; padding: 0; }
 
 html {
   background: var(--bg);
-  color-scheme: dark;
   color: var(--fg);
   font-family: var(--font-serif);
   font-size: var(--t-body);

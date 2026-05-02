@@ -35,7 +35,8 @@ interface NodeStyle {
   inverted?: boolean;
 }
 
-const NODE_STYLES: Record<NodeType, NodeStyle> = {
+// Dark theme node styles
+const NODE_STYLES_DARK: Record<NodeType, NodeStyle> = {
   input:        { bg: '#1e1d1b', border: '#F5F0EB', icon: '→',  accent: '#F5F0EB' },
   output:       { bg: '#F5F0EB', border: '#F5F0EB', icon: '✓',  accent: '#0F0F12', inverted: true },
   llm:          { bg: '#1c1b19', border: '#2e2c29', icon: '✦',  accent: '#E85C30' },
@@ -51,6 +52,27 @@ const NODE_STYLES: Record<NodeType, NodeStyle> = {
   human:        { bg: '#0f1520', border: '#1e3a5f', icon: '☻',  accent: '#60a5fa' },
   eval:         { bg: '#0f1a12', border: '#1a3d22', icon: '★',  accent: '#4ade80' },
 };
+
+// Light theme node styles
+const NODE_STYLES_LIGHT: Record<NodeType, NodeStyle> = {
+  input:        { bg: '#F5F0EB', border: '#3a3733', icon: '→',  accent: '#1F1D1A' },
+  output:       { bg: '#1F1D1A', border: '#1F1D1A', icon: '✓',  accent: '#F5F0EB', inverted: true },
+  llm:          { bg: '#EDE6D8', border: '#B8B0A0', icon: '✦',  accent: '#C03A20' },
+  agent:        { bg: '#EDE6D8', border: '#B8B0A0', icon: '◆',  accent: '#C03A20' },
+  orchestrator: { bg: '#EDE6D8', border: '#B8B0A0', icon: '❖',  accent: '#C03A20' },
+  router:       { bg: '#EDE6D8', border: '#B8B0A0', icon: '⤳',  accent: '#C03A20' },
+  aggregator:   { bg: '#EDE6D8', border: '#B8B0A0', icon: '⨁',  accent: '#C03A20' },
+  tools:        { bg: '#E5DFD4', border: '#B8B0A0', icon: '⚙',  accent: '#7A7468' },
+  env:          { bg: '#E5DFD4', border: '#B8B0A0', icon: '◉',  accent: '#7A7468' },
+  gate:         { bg: '#E5DFD4', border: '#B8B0A0', icon: '◇',  accent: '#7A7468' },
+  retry:        { bg: '#E5DFD4', border: '#B8B0A0', icon: '↻',  accent: '#7A7468' },
+  guard:        { bg: '#F5EAEA', border: '#E0B8B8', icon: '⛨',  accent: '#C04040' },
+  human:        { bg: '#EAF0F8', border: '#B8CCE8', icon: '☻',  accent: '#2563EB' },
+  eval:         { bg: '#EAF5EE', border: '#B8DEC8', icon: '★',  accent: '#16A34A' },
+};
+
+// Kept for NodeTooltip (which has no access to isDark — uses dark as fallback)
+const NODE_STYLES: Record<NodeType, NodeStyle> = NODE_STYLES_DARK;
 
 // ── Measure / layout helpers ─────────────────────────────────────────
 
@@ -133,13 +155,16 @@ function laneLayout(nodes: NodeDef[], edges: EdgeDef[]): PositionedNode[] {
 }
 
 function resolveOverlaps(nodes: PositionedNode[]): PositionedNode[] {
-  const PAD_X = 16;
-  const PAD_Y = 12;
+  const PAD_X = 20;
+  const PAD_Y = 14;
+  // Nodes whose y-centers differ by less than this are on the same horizontal row
+  const SAME_ROW_THRESHOLD = 22;
+
   let changed = true;
   let passes = 0;
   const result = nodes.map(n => ({ ...n }));
 
-  while (changed && passes < 8) {
+  while (changed && passes < 16) {
     changed = false;
     passes++;
     for (let i = 0; i < result.length; i++) {
@@ -148,11 +173,26 @@ function resolveOverlaps(nodes: PositionedNode[]): PositionedNode[] {
         const b = result[j];
         const overlapX = a.x + a.w + PAD_X > b.x && b.x + b.w + PAD_X > a.x;
         const overlapY = a.y + a.h + PAD_Y > b.y && b.y + b.h + PAD_Y > a.y;
-        if (overlapX && overlapY) {
-          // Push b down
-          b.y = a.y + a.h + PAD_Y;
-          changed = true;
+        if (!overlapX || !overlapY) continue;
+
+        const sameRow = Math.abs((a.y + a.h / 2) - (b.y + b.h / 2)) <= SAME_ROW_THRESHOLD;
+
+        if (sameRow) {
+          // Same horizontal row → push the rightmost node further right
+          if (b.x >= a.x) {
+            b.x = a.x + a.w + PAD_X;
+          } else {
+            a.x = b.x + b.w + PAD_X;
+          }
+        } else {
+          // Different rows → push the lower node down
+          if (b.y >= a.y) {
+            b.y = a.y + a.h + PAD_Y;
+          } else {
+            a.y = b.y + b.h + PAD_Y;
+          }
         }
+        changed = true;
       }
     }
   }
@@ -204,7 +244,25 @@ function edgeKey(from: string, to: string) {
 
 // ── Canvas component ──────────────────────────────────────────────────
 
+// ── Theme hook ───────────────────────────────────────────────────────
+
+export function useIsDark(): boolean {
+  const [dark, setDark] = useState<boolean>(() => {
+    if (typeof document === 'undefined') return false;
+    return document.documentElement.getAttribute('data-theme') === 'dark';
+  });
+  useEffect(() => {
+    const obs = new MutationObserver(() => {
+      setDark(document.documentElement.getAttribute('data-theme') === 'dark');
+    });
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => obs.disconnect();
+  }, []);
+  return dark;
+}
+
 export default function Canvas({ nodes, edges, focusedNodeId, animatingEdges, onNodeClick }: CanvasProps) {
+  const isDark = useIsDark();
   const svgRef = useRef<SVGSVGElement>(null);
   const [vb, setVb] = useState({ x: 0, y: 0, w: 800, h: 480 });
   const [zoom, setZoom] = useState(1);
@@ -218,53 +276,98 @@ export default function Canvas({ nodes, edges, focusedNodeId, animatingEdges, on
   const positioned = useMemo(() => laneLayout(nodes, edges), [nodes, edges]);
   const byId = useMemo(() => new Map(positioned.map(n => [n.id, n])), [positioned]);
 
-  // Fit to viewport when flow changes
+  // Always-current vb ref so auto-pan never uses a stale closure value
+  const vbRef = useRef(vb);
+  useEffect(() => { vbRef.current = vb; }, [vb]);
+
+  // Cancel handle for the fit animation
+  const fitRafRef = useRef<number | null>(null);
+
+  // Animated fit to viewport whenever the node set changes
   useEffect(() => {
     if (!svgRef.current || positioned.length === 0) return;
-    const rect = svgRef.current.getBoundingClientRect();
-    if (rect.width === 0) return;
 
-    const minX = Math.min(...positioned.map(n => n.x)) - 40;
-    const minY = Math.min(...positioned.map(n => n.y)) - 40;
-    const maxX = Math.max(...positioned.map(n => n.x + n.w)) + 40;
-    const maxY = Math.max(...positioned.map(n => n.y + n.h)) + 40;
-    const contentW = maxX - minX;
-    const contentH = maxY - minY;
-    const scaleX = rect.width / contentW;
-    const scaleY = rect.height / contentH;
-    const scale = Math.min(scaleX, scaleY, 1.2);
-    const newW = rect.width / scale;
-    const newH = rect.height / scale;
-    setVb({ x: minX - (newW - contentW) / 2, y: minY - (newH - contentH) / 2, w: newW, h: newH });
-    setZoom(scale);
-    setPan({ x: 0, y: 0 });
+    // Cancel any in-progress fit
+    if (fitRafRef.current !== null) cancelAnimationFrame(fitRafRef.current);
+
+    const doFit = () => {
+      if (!svgRef.current) return;
+      const rect = svgRef.current.getBoundingClientRect();
+      if (rect.width === 0) return;
+
+      const minX = Math.min(...positioned.map(n => n.x)) - 56;
+      const minY = Math.min(...positioned.map(n => n.y)) - 56;
+      const maxX = Math.max(...positioned.map(n => n.x + n.w)) + 56;
+      const maxY = Math.max(...positioned.map(n => n.y + n.h)) + 56;
+      const contentW = maxX - minX;
+      const contentH = maxY - minY;
+      const scale = Math.min(rect.width / contentW, rect.height / contentH, 1.2);
+      const newW = rect.width / scale;
+      const newH = rect.height / scale;
+      const targetVb = {
+        x: minX - (newW - contentW) / 2,
+        y: minY - (newH - contentH) / 2,
+        w: newW,
+        h: newH,
+      };
+
+      setZoom(scale);
+      setPan({ x: 0, y: 0 });
+
+      // Animate from current vb to target
+      const startVb = { ...vbRef.current };
+      const startTime = performance.now();
+      const duration = 380;
+
+      const tick = (now: number) => {
+        const t = Math.min((now - startTime) / duration, 1);
+        const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        setVb({
+          x: startVb.x + (targetVb.x - startVb.x) * ease,
+          y: startVb.y + (targetVb.y - startVb.y) * ease,
+          w: startVb.w + (targetVb.w - startVb.w) * ease,
+          h: startVb.h + (targetVb.h - startVb.h) * ease,
+        });
+        if (t < 1) { fitRafRef.current = requestAnimationFrame(tick); }
+        else { fitRafRef.current = null; }
+      };
+      fitRafRef.current = requestAnimationFrame(tick);
+    };
+
+    // Defer one frame so SVG has correct dimensions on first paint
+    fitRafRef.current = requestAnimationFrame(doFit);
+    return () => { if (fitRafRef.current !== null) cancelAnimationFrame(fitRafRef.current); };
   }, [positioned]);
 
-  // Auto-pan to focused node
+  // Auto-pan to focused node (reads vbRef so fit always wins the starting point)
   useEffect(() => {
     if (!focusedNodeId || !svgRef.current) return;
     const n = byId.get(focusedNodeId);
     if (!n) return;
     const cx = n.x + n.w / 2;
     const cy = n.y + n.h / 2;
-    const rect = svgRef.current.getBoundingClientRect();
-    const targetX = cx - vb.w / 2;
-    const targetY = cy - vb.h / 2;
-    // Smooth pan: interpolate over ~300ms
-    const startVb = { ...vb };
-    const startTime = performance.now();
-    const duration = 300;
-    const animate = (now: number) => {
-      const t = Math.min((now - startTime) / duration, 1);
-      const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-      setVb(prev => ({
-        ...prev,
-        x: startVb.x + (targetX - startVb.x) * ease,
-        y: startVb.y + (targetY - startVb.y) * ease,
-      }));
-      if (t < 1) requestAnimationFrame(animate);
-    };
-    requestAnimationFrame(animate);
+
+    // Wait one frame so any concurrent fit animation has committed its first vb update
+    const raf = requestAnimationFrame(() => {
+      const currentVb = vbRef.current;
+      const targetX = cx - currentVb.w / 2;
+      const targetY = cy - currentVb.h / 2;
+      const startVb = { ...currentVb };
+      const startTime = performance.now();
+      const duration = 300;
+      const animate = (now: number) => {
+        const t = Math.min((now - startTime) / duration, 1);
+        const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        setVb(prev => ({
+          ...prev,
+          x: startVb.x + (targetX - startVb.x) * ease,
+          y: startVb.y + (targetY - startVb.y) * ease,
+        }));
+        if (t < 1) requestAnimationFrame(animate);
+      };
+      requestAnimationFrame(animate);
+    });
+    return () => cancelAnimationFrame(raf);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusedNodeId]);
 
@@ -389,19 +492,19 @@ export default function Canvas({ nodes, edges, focusedNodeId, animatingEdges, on
       <defs>
         {/* Dot pattern bg */}
         <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-          <circle cx="1" cy="1" r="0.8" fill="#242422" />
+          <circle cx="1" cy="1" r="0.8" fill={isDark ? '#2e2b28' : '#C4BAA8'} />
         </pattern>
         {/* Arrow markers */}
         <marker id="arrow-idle" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-          <path d="M 0 0 L 6 3 L 0 6 z" fill="#3a3836" />
+          <path d="M 0 0 L 6 3 L 0 6 z" fill={isDark ? '#3a3836' : '#9E9488'} />
         </marker>
         <marker id="arrow-active" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-          <path d="M 0 0 L 6 3 L 0 6 z" fill="#E85C30" />
+          <path d="M 0 0 L 6 3 L 0 6 z" fill={isDark ? '#E85C30' : '#C03A20'} />
         </marker>
         {/* Radial glow for focused node */}
         <radialGradient id="nodeFocusGlow" cx="50%" cy="50%" r="60%">
-          <stop offset="0%" stopColor="#E85C30" stopOpacity="0.15" />
-          <stop offset="100%" stopColor="#E85C30" stopOpacity="0" />
+          <stop offset="0%" stopColor={isDark ? '#E85C30' : '#C03A20'} stopOpacity="0.15" />
+          <stop offset="100%" stopColor={isDark ? '#E85C30' : '#C03A20'} stopOpacity="0" />
         </radialGradient>
       </defs>
 
@@ -428,7 +531,7 @@ export default function Canvas({ nodes, edges, focusedNodeId, animatingEdges, on
               <path
                 d={d}
                 fill="none"
-                stroke="#E85C30"
+                stroke={isDark ? '#E85C30' : '#C03A20'}
                 strokeWidth={6}
                 strokeOpacity={0.12}
                 strokeLinecap="round"
@@ -438,7 +541,7 @@ export default function Canvas({ nodes, edges, focusedNodeId, animatingEdges, on
             <path
               d={d}
               fill="none"
-              stroke={isActive ? '#E85C30' : '#3a3836'}
+              stroke={isActive ? (isDark ? '#E85C30' : '#C03A20') : (isDark ? '#3a3836' : '#9E9488')}
               strokeWidth={isActive ? 1.5 : 1}
               strokeDasharray={edge.dashed ? '5 4' : undefined}
               markerEnd={`url(#arrow-${isActive ? 'active' : 'idle'})`}
@@ -447,7 +550,7 @@ export default function Canvas({ nodes, edges, focusedNodeId, animatingEdges, on
               <path
                 d={bezierPath(p2, p1)}
                 fill="none"
-                stroke={isActive ? '#E85C30' : '#3a3836'}
+                stroke={isActive ? (isDark ? '#E85C30' : '#C03A20') : (isDark ? '#3a3836' : '#9E9488')}
                 strokeWidth={isActive ? 1.5 : 1}
                 strokeDasharray={edge.dashed ? '5 4' : undefined}
                 markerEnd={`url(#arrow-${isActive ? 'active' : 'idle'})`}
@@ -458,7 +561,7 @@ export default function Canvas({ nodes, edges, focusedNodeId, animatingEdges, on
               <text
                 x={(p1.x + p2.x) / 2}
                 y={(p1.y + p2.y) / 2 - 6}
-                fill="#636059"
+                fill={isDark ? '#636059' : '#9E9488'}
                 fontSize={9}
                 textAnchor="middle"
                 fontFamily="var(--font-jetbrains-mono), monospace"
@@ -469,8 +572,8 @@ export default function Canvas({ nodes, edges, focusedNodeId, animatingEdges, on
             {/* Token on active edge */}
             {isActive && tokenPt && (
               <g>
-                <circle cx={tokenPt.x} cy={tokenPt.y} r={8} fill="#E85C30" fillOpacity={0.2} />
-                <circle cx={tokenPt.x} cy={tokenPt.y} r={3.5} fill="#E85C30" />
+                <circle cx={tokenPt.x} cy={tokenPt.y} r={8} fill={isDark ? '#E85C30' : '#C03A20'} fillOpacity={0.2} />
+                <circle cx={tokenPt.x} cy={tokenPt.y} r={3.5} fill={isDark ? '#E85C30' : '#C03A20'} />
               </g>
             )}
           </g>
@@ -479,10 +582,15 @@ export default function Canvas({ nodes, edges, focusedNodeId, animatingEdges, on
 
       {/* Nodes */}
       {positioned.map(node => {
-        const style = NODE_STYLES[node.type];
+        const styles = isDark ? NODE_STYLES_DARK : NODE_STYLES_LIGHT;
+        const style = styles[node.type];
         const isFocused = node.id === focusedNodeId;
-        const textColor = style.inverted ? '#0F0F12' : '#F5F0EB';
-        const subColor = style.inverted ? '#3a3836' : '#736e68';
+        const textColor = isDark
+          ? (style.inverted ? '#0F0F12' : '#F5F0EB')
+          : (style.inverted ? '#F5F0EB' : '#1F1D1A');
+        const subColor = isDark
+          ? (style.inverted ? '#3a3836' : '#736e68')
+          : (style.inverted ? '#9E9488' : '#6F6A5E');
 
         return (
           <g
@@ -621,7 +729,8 @@ export default function Canvas({ nodes, edges, focusedNodeId, animatingEdges, on
 
 // Export tooltip as separate component for overlay in page
 export function NodeTooltip({ node, px, py }: { node: PositionedNode; px: number; py: number }) {
-  const style = NODE_STYLES[node.type];
+  const isDark = useIsDark();
+  const style = (isDark ? NODE_STYLES_DARK : NODE_STYLES_LIGHT)[node.type];
   return (
     <div
       className={styles.nodeTooltip}
@@ -634,5 +743,7 @@ export function NodeTooltip({ node, px, py }: { node: PositionedNode; px: number
   );
 }
 
-// Export NODE_STYLES for legend
+// Export style maps and hook for use in page.tsx
+export { NODE_STYLES_DARK, NODE_STYLES_LIGHT };
+// Legacy alias kept for external imports that may still reference NODE_STYLES
 export { NODE_STYLES };

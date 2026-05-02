@@ -1,24 +1,46 @@
 // Agent Patterns Lab — scoped styles
-// Uses design tokens from globals.scss / tailwind tokens
+// Uses CSS custom properties for theming (light default, dark override)
 
-$bg: #0F0F12;
-$bg2: #141416;
-$card: #1c1b19;
-$fg: #F5F0EB;
-$fg2: #a09b96;
-$fg3: #636059;
-$accent: #E85C30;
-$border: #242422;
-
+// ── Lab-scoped tokens (light defaults) ──────────────────────────────
 .lab {
+  --lbg:        var(--bg);          // #EFE8D8 / dark: #0F0F12
+  --lbg2:       var(--bg-elev);     // #E6DFCD / dark: #16161A
+  --lcard:      #DDD8CE;            // custom card surface
+  --lfg:        var(--fg);          // #1F1D1A / dark: #F2EBDD
+  --lfg2:       var(--fg-soft);     // #3B3833 / dark: #C9C2B4
+  --lfg3:       var(--muted);       // #6F6A5E / dark: #8A857A
+  --lacc:       var(--accent);      // #C03A20 / dark: #E84A2E
+  --lbord:      var(--rule);        // #D2C9B5 / dark: #2A2925
+  // Semi-transparent accent
+  --lacc-06:    rgba(192, 58, 32, 0.06);
+  --lacc-10:    rgba(192, 58, 32, 0.10);
+  --lacc-30:    rgba(192, 58, 32, 0.30);
+  --lacc-40:    rgba(192, 58, 32, 0.40);
+  // Hover / overlay surfaces
+  --lhover:     rgba(0, 0, 0, 0.04);
+  --lhover2:    rgba(0, 0, 0, 0.025);
+  --lsample-bg: rgba(0, 0, 0, 0.05);
+
   display: flex;
   flex-direction: column;
   height: calc(100dvh - 77px);
-  background: $bg;
-  color: $fg;
+  background: var(--lbg);
+  color: var(--lfg);
   font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
   overflow: hidden;
   position: relative;
+}
+
+// ── Dark overrides ───────────────────────────────────────────────────
+:global([data-theme="dark"]) .lab {
+  --lcard:      #1c1b19;
+  --lacc-06:    rgba(232, 92, 48, 0.06);
+  --lacc-10:    rgba(232, 92, 48, 0.10);
+  --lacc-30:    rgba(232, 92, 48, 0.30);
+  --lacc-40:    rgba(232, 92, 48, 0.40);
+  --lhover:     rgba(255, 255, 255, 0.03);
+  --lhover2:    rgba(255, 255, 255, 0.02);
+  --lsample-bg: rgba(0, 0, 0, 0.20);
 }
 
 .topBar {
@@ -27,32 +49,32 @@ $border: #242422;
   gap: 12px;
   padding: 0 16px;
   height: 40px;
-  border-bottom: 1px solid $border;
-  background: $bg2;
+  border-bottom: 1px solid var(--lbord);
+  background: var(--lbg2);
   flex-shrink: 0;
   z-index: 10;
 }
 
 .backLink {
-  color: $fg3;
+  color: var(--lfg3);
   font-size: 11px;
   text-decoration: none;
   letter-spacing: 0.02em;
   transition: color 0.15s;
 
   &:hover {
-    color: $fg2;
+    color: var(--lfg2);
   }
 }
 
 .topSep {
-  color: $border;
+  color: var(--lbord);
   font-size: 11px;
 }
 
 .topTitle {
   font-size: 11px;
-  color: $fg2;
+  color: var(--lfg2);
   letter-spacing: 0.04em;
 }
 
@@ -62,12 +84,12 @@ $border: #242422;
   overflow: hidden;
 }
 
-// ── Left sidebar ────────────────────────────────────────────────────
+// ── Left sidebar ─────────────────────────────────────────────────────
 .sidebar {
   width: 260px;
   flex-shrink: 0;
-  border-right: 1px solid $border;
-  background: $bg2;
+  border-right: 1px solid var(--lbord);
+  background: var(--lbg2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -78,8 +100,8 @@ $border: #242422;
   font-size: 9px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: $fg3;
-  border-bottom: 1px solid $border;
+  color: var(--lfg3);
+  border-bottom: 1px solid var(--lbord);
   flex-shrink: 0;
 }
 
@@ -90,7 +112,7 @@ $border: #242422;
 
   &::-webkit-scrollbar { width: 4px; }
   &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: $border; border-radius: 2px; }
+  &::-webkit-scrollbar-thumb { background: var(--lbord); border-radius: 2px; }
 }
 
 .caseItem {
@@ -100,35 +122,35 @@ $border: #242422;
   border-left: 2px solid transparent;
 
   &:hover {
-    background: rgba(255,255,255,0.03);
+    background: var(--lhover);
   }
 
   &.caseItemActive {
-    background: rgba($accent, 0.06);
-    border-left-color: $accent;
+    background: var(--lacc-06);
+    border-left-color: var(--lacc);
   }
 }
 
 .caseTitle {
   font-size: 12px;
-  color: $fg;
+  color: var(--lfg);
   line-height: 1.3;
 }
 
 .caseIndustry {
   font-size: 10px;
-  color: $fg3;
+  color: var(--lfg3);
   margin-top: 2px;
 }
 
 .casePattern {
   font-size: 10px;
-  color: $accent;
+  color: var(--lacc);
   margin-top: 3px;
   opacity: 0.8;
 }
 
-// ── Center ───────────────────────────────────────────────────────────
+// ── Center ────────────────────────────────────────────────────────────
 .center {
   flex: 1;
   display: flex;
@@ -161,7 +183,7 @@ $border: #242422;
   height: 100%;
 }
 
-// ── Zoom controls ────────────────────────────────────────────────────
+// ── Zoom controls ─────────────────────────────────────────────────────
 .zoomControls {
   position: absolute;
   bottom: 12px;
@@ -175,10 +197,10 @@ $border: #242422;
 .zoomBtn {
   width: 28px;
   height: 28px;
-  background: $bg2;
-  border: 1px solid $border;
+  background: var(--lbg2);
+  border: 1px solid var(--lbord);
   border-radius: 4px;
-  color: $fg3;
+  color: var(--lfg3);
   font-size: 14px;
   font-family: var(--font-jetbrains-mono), monospace;
   cursor: pointer;
@@ -190,17 +212,17 @@ $border: #242422;
   line-height: 1;
 
   &:hover {
-    color: $fg;
-    border-color: $fg3;
+    color: var(--lfg);
+    border-color: var(--lfg3);
   }
 }
 
-// ── Step rail ────────────────────────────────────────────────────────
+// ── Step rail ─────────────────────────────────────────────────────────
 .stepRail {
   height: 160px;
   flex-shrink: 0;
-  border-top: 1px solid $border;
-  background: $bg2;
+  border-top: 1px solid var(--lbord);
+  background: var(--lbg2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -221,23 +243,17 @@ $border: #242422;
 
   &::-webkit-scrollbar { width: 3px; }
   &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: $border; }
+  &::-webkit-scrollbar-thumb { background: var(--lbord); }
 }
 
 @keyframes stepFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .stepTitle {
   font-size: 11px;
-  color: $accent;
+  color: var(--lacc);
   font-weight: 600;
   margin-bottom: 6px;
   letter-spacing: 0.02em;
@@ -245,7 +261,7 @@ $border: #242422;
 
 .stepText {
   font-size: 11px;
-  color: $fg2;
+  color: var(--lfg2);
   line-height: 1.6;
 }
 
@@ -254,7 +270,7 @@ $border: #242422;
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
-  border-top: 1px solid $border;
+  border-top: 1px solid var(--lbord);
   flex-shrink: 0;
 }
 
@@ -264,9 +280,9 @@ $border: #242422;
   justify-content: center;
   width: 26px;
   height: 26px;
-  border: 1px solid $border;
+  border: 1px solid var(--lbord);
   background: transparent;
-  color: $fg2;
+  color: var(--lfg2);
   font-size: 12px;
   cursor: pointer;
   border-radius: 2px;
@@ -274,8 +290,8 @@ $border: #242422;
   transition: color 0.1s, border-color 0.1s;
 
   &:hover:not(:disabled) {
-    color: $fg;
-    border-color: $fg3;
+    color: var(--lfg);
+    border-color: var(--lfg3);
   }
 
   &:disabled {
@@ -285,18 +301,18 @@ $border: #242422;
 
   &.stepBtnPlay {
     width: 32px;
-    color: $accent;
-    border-color: $accent;
+    color: var(--lacc);
+    border-color: var(--lacc);
 
     &:hover {
-      background: rgba($accent, 0.1);
+      background: var(--lacc-10);
     }
   }
 }
 
 .stepCounter {
   font-size: 10px;
-  color: $fg3;
+  color: var(--lfg3);
   margin-left: 4px;
 }
 
@@ -310,32 +326,32 @@ $border: #242422;
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: $border;
+  background: var(--lbord);
   cursor: pointer;
   transition: background 0.15s;
 
   &.stepDotActive {
-    background: $accent;
+    background: var(--lacc);
   }
 
   &:hover {
-    background: $fg3;
+    background: var(--lfg3);
   }
 }
 
-// ── Right sidebar ────────────────────────────────────────────────────
+// ── Right sidebar ─────────────────────────────────────────────────────
 .rightSidebar {
   width: 280px;
   flex-shrink: 0;
-  border-left: 1px solid $border;
-  background: $bg2;
+  border-left: 1px solid var(--lbord);
+  background: var(--lbg2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .rightSection {
-  border-bottom: 1px solid $border;
+  border-bottom: 1px solid var(--lbord);
   flex-shrink: 0;
 }
 
@@ -344,7 +360,7 @@ $border: #242422;
   font-size: 9px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: $fg3;
+  color: var(--lfg3);
 }
 
 .layerCards {
@@ -355,14 +371,14 @@ $border: #242422;
 }
 
 .layerCard {
-  border: 1px solid $border;
-  background: $card;
+  border: 1px solid var(--lbord);
+  background: var(--lcard);
   border-radius: 2px;
   overflow: hidden;
   transition: border-color 0.15s;
 
   &.layerCardOn {
-    border-color: rgba($accent, 0.4);
+    border-color: var(--lacc-40);
   }
 }
 
@@ -375,7 +391,7 @@ $border: #242422;
   user-select: none;
 
   &:hover {
-    background: rgba(255,255,255,0.02);
+    background: var(--lhover2);
   }
 }
 
@@ -383,7 +399,7 @@ $border: #242422;
   width: 28px;
   height: 14px;
   border-radius: 7px;
-  background: $border;
+  background: var(--lbord);
   position: relative;
   flex-shrink: 0;
   transition: background 0.2s;
@@ -394,32 +410,32 @@ $border: #242422;
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: $fg3;
+    background: var(--lfg3);
     top: 2px;
     left: 2px;
     transition: left 0.2s, background 0.2s;
   }
 
   &.layerToggleOn {
-    background: rgba($accent, 0.3);
+    background: var(--lacc-30);
 
     &::after {
       left: 16px;
-      background: $accent;
+      background: var(--lacc);
     }
   }
 }
 
 .layerName {
   font-size: 11px;
-  color: $fg;
+  color: var(--lfg);
   flex: 1;
 }
 
 .layerCardDesc {
   padding: 0 10px 8px;
   font-size: 10px;
-  color: $fg3;
+  color: var(--lfg3);
   line-height: 1.55;
   animation: stepFadeIn 0.2s ease;
 }
@@ -431,8 +447,8 @@ $border: #242422;
   font-size: 9px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: $accent;
-  border: 1px solid rgba($accent, 0.3);
+  color: var(--lacc);
+  border: 1px solid var(--lacc-30);
   border-radius: 2px;
 }
 
@@ -443,7 +459,7 @@ $border: #242422;
 
   &::-webkit-scrollbar { width: 3px; }
   &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: $border; }
+  &::-webkit-scrollbar-thumb { background: var(--lbord); }
 }
 
 .legendItem {
@@ -466,21 +482,21 @@ $border: #242422;
 
 .legendLabel {
   font-size: 10px;
-  color: $fg3;
+  color: var(--lfg3);
   text-transform: capitalize;
 }
 
-// ── Node tooltip / detail popup ──────────────────────────────────────
+// ── Node tooltip / detail popup ───────────────────────────────────────
 .nodeTooltip {
   position: absolute;
   z-index: 50;
-  background: $card;
-  border: 1px solid $border;
+  background: var(--lcard);
+  border: 1px solid var(--lbord);
   border-radius: 3px;
   padding: 10px 12px;
   max-width: 220px;
   pointer-events: none;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   animation: stepFadeIn 0.15s ease;
 }
 
@@ -488,24 +504,24 @@ $border: #242422;
   font-size: 9px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: $accent;
+  color: var(--lacc);
   margin-bottom: 4px;
 }
 
 .tooltipLabel {
   font-size: 12px;
-  color: $fg;
+  color: var(--lfg);
   font-weight: 600;
   margin-bottom: 5px;
 }
 
 .tooltipDetails {
   font-size: 10px;
-  color: $fg2;
+  color: var(--lfg2);
   line-height: 1.55;
 }
 
-// ── Sample IO panel ─────────────────────────────────────────────────
+// ── Sample IO panel ───────────────────────────────────────────────────
 .samplePanel {
   padding: 0 10px 10px;
 }
@@ -518,16 +534,16 @@ $border: #242422;
   font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: $fg3;
+  color: var(--lfg3);
   margin-bottom: 3px;
 }
 
 .sampleText {
   font-size: 10px;
-  color: $fg2;
+  color: var(--lfg2);
   line-height: 1.5;
-  background: rgba(0,0,0,0.2);
-  border: 1px solid $border;
+  background: var(--lsample-bg);
+  border: 1px solid var(--lbord);
   border-radius: 2px;
   padding: 5px 8px;
 }

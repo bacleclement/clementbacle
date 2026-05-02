@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link';
 import { USE_CASES } from './usecases';
 import type { UseCase, NodeDef, EdgeDef, StepDef, LayerDef } from './usecases';
-import Canvas, { NodeTooltip, NODE_STYLES } from './canvas';
+import Canvas, { NodeTooltip, NODE_STYLES_DARK, NODE_STYLES_LIGHT, useIsDark } from './canvas';
 import type { PositionedNode } from './canvas';
 import styles from './lab.module.scss';
 
@@ -91,6 +91,8 @@ const TYPE_LABELS: Record<string, string> = {
 // ── Page ──────────────────────────────────────────────────────────────
 
 export default function AgentPatternsPage() {
+  const isDark = useIsDark();
+  const NODE_STYLES = isDark ? NODE_STYLES_DARK : NODE_STYLES_LIGHT;
   const [selectedCaseId, setSelectedCaseId] = useState(USE_CASES[0].id);
   const [layers, setLayers] = useState<LayerState>({
     security: false,

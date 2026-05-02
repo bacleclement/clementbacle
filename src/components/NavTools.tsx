@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 
 export default function NavTools() {
   const [theme, setTheme] = useState<string>(() => {
-    if (typeof document === 'undefined') return 'dark'
-    return document.documentElement.getAttribute('data-theme') ?? 'dark'
+    if (typeof document === 'undefined') return 'light'
+    return document.documentElement.getAttribute('data-theme') ?? 'light'
   })
   const [lang, setLang] = useState<string>(() => {
     if (typeof window === 'undefined') return 'fr'
@@ -21,7 +21,7 @@ export default function NavTools() {
 
     // Sync React state whenever data-theme changes (from toggle, terminal, etc.)
     const observer = new MutationObserver(() => {
-      setTheme(document.documentElement.getAttribute('data-theme') ?? 'dark')
+      setTheme(document.documentElement.getAttribute('data-theme') ?? 'light')
     })
     observer.observe(document.documentElement, {
       attributes: true,
@@ -31,7 +31,7 @@ export default function NavTools() {
   }, [])
 
   function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme') ?? 'dark'
+    const current = document.documentElement.getAttribute('data-theme') ?? 'light'
     const next = current === 'light' ? 'dark' : 'light'
     document.documentElement.setAttribute('data-theme', next)
     localStorage.setItem('theme', next)

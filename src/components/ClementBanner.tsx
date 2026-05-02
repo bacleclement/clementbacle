@@ -17,7 +17,7 @@ export default function ClementBanner() {
   }, [])
 
   function exit() {
-    const prev = document.documentElement.getAttribute('data-prev-theme') ?? 'dark'
+    const prev = document.documentElement.getAttribute('data-prev-theme') ?? 'light'
     document.documentElement.setAttribute('data-theme', prev)
     localStorage.setItem('theme', prev)
   }

@@ -32,7 +32,11 @@ export default function Terminal() {
   const gameRef = useRef<GameState | null>(null)
 
   useEffect(() => {
-    if (window.innerWidth >= 900 && !pathname.startsWith('/lab')) queueMicrotask(() => setCollapsed(false))
+    if (pathname.startsWith('/lab')) {
+      setCollapsed(true)
+    } else if (window.innerWidth >= 900) {
+      queueMicrotask(() => setCollapsed(false))
+    }
   }, [pathname])
 
   useEffect(() => {
@@ -129,7 +133,7 @@ export default function Terminal() {
     },
     theme: () => {
       const root = document.documentElement
-      const current = root.getAttribute('data-theme') ?? 'dark'
+      const current = root.getAttribute('data-theme') ?? 'light'
       const next = current === 'light' ? 'dark' : 'light'
       root.setAttribute('data-theme', next)
       localStorage.setItem('theme', next)
@@ -140,13 +144,13 @@ export default function Terminal() {
       const root = document.documentElement
       const cur = root.getAttribute('data-theme')
       if (cur === 'clement') {
-        const prev = root.getAttribute('data-prev-theme') ?? 'dark'
+        const prev = root.getAttribute('data-prev-theme') ?? 'light'
         root.setAttribute('data-theme', prev)
         localStorage.setItem('theme', prev)
         out(`<span class="ok">&gt; phosphor mode disengaged. back to ${prev}.</span>`)
         return
       }
-      root.setAttribute('data-prev-theme', cur ?? 'dark')
+      root.setAttribute('data-prev-theme', cur ?? 'light')
       root.setAttribute('data-theme', 'clement')
       localStorage.setItem('theme', 'clement')
       out('<span class="ok">&gt; engaging CRT phosphor mode...</span>')
@@ -270,6 +274,8 @@ export default function Terminal() {
       setCollapsed(true)
     }
   }
+
+  if (pathname.startsWith('/lab')) return null
 
   return (
     <aside
