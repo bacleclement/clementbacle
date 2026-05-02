@@ -1,0 +1,492 @@
+// Agent Patterns Lab — scoped styles
+// Uses design tokens from globals.scss / tailwind tokens
+
+$bg: #0F0F12;
+$bg2: #141416;
+$card: #1c1b19;
+$fg: #F5F0EB;
+$fg2: #a09b96;
+$fg3: #636059;
+$accent: #E85C30;
+$border: #242422;
+
+.lab {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 49px);
+  background: $bg;
+  color: $fg;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  overflow: hidden;
+  position: relative;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  height: 40px;
+  border-bottom: 1px solid $border;
+  background: $bg2;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.backLink {
+  color: $fg3;
+  font-size: 11px;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.15s;
+
+  &:hover {
+    color: $fg2;
+  }
+}
+
+.topSep {
+  color: $border;
+  font-size: 11px;
+}
+
+.topTitle {
+  font-size: 11px;
+  color: $fg2;
+  letter-spacing: 0.04em;
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+// ── Left sidebar ────────────────────────────────────────────────────
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  border-right: 1px solid $border;
+  background: $bg2;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebarHeader {
+  padding: 12px 14px 8px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $fg3;
+  border-bottom: 1px solid $border;
+  flex-shrink: 0;
+}
+
+.caseList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: $border; border-radius: 2px; }
+}
+
+.caseItem {
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.1s;
+  border-left: 2px solid transparent;
+
+  &:hover {
+    background: rgba(255,255,255,0.03);
+  }
+
+  &.caseItemActive {
+    background: rgba($accent, 0.06);
+    border-left-color: $accent;
+  }
+}
+
+.caseTitle {
+  font-size: 12px;
+  color: $fg;
+  line-height: 1.3;
+}
+
+.caseIndustry {
+  font-size: 10px;
+  color: $fg3;
+  margin-top: 2px;
+}
+
+.casePattern {
+  font-size: 10px;
+  color: $accent;
+  margin-top: 3px;
+  opacity: 0.8;
+}
+
+// ── Center ───────────────────────────────────────────────────────────
+.center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.canvasWrap {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.canvasSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+// ── Step rail ────────────────────────────────────────────────────────
+.stepRail {
+  height: 140px;
+  flex-shrink: 0;
+  border-top: 1px solid $border;
+  background: $bg2;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.stepRailInner {
+  flex: 1;
+  display: flex;
+  gap: 0;
+  overflow: hidden;
+}
+
+.stepNarration {
+  flex: 1;
+  padding: 12px 16px;
+  overflow-y: auto;
+  animation: stepFadeIn 0.3s ease;
+
+  &::-webkit-scrollbar { width: 3px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: $border; }
+}
+
+@keyframes stepFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stepTitle {
+  font-size: 11px;
+  color: $accent;
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+
+.stepText {
+  font-size: 11px;
+  color: $fg2;
+  line-height: 1.6;
+}
+
+.stepControls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-top: 1px solid $border;
+  flex-shrink: 0;
+}
+
+.stepBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid $border;
+  background: transparent;
+  color: $fg2;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 2px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  transition: color 0.1s, border-color 0.1s;
+
+  &:hover:not(:disabled) {
+    color: $fg;
+    border-color: $fg3;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  &.stepBtnPlay {
+    width: 32px;
+    color: $accent;
+    border-color: $accent;
+
+    &:hover {
+      background: rgba($accent, 0.1);
+    }
+  }
+}
+
+.stepCounter {
+  font-size: 10px;
+  color: $fg3;
+  margin-left: 4px;
+}
+
+.stepDots {
+  display: flex;
+  gap: 4px;
+  margin-left: 8px;
+}
+
+.stepDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: $border;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &.stepDotActive {
+    background: $accent;
+  }
+
+  &:hover {
+    background: $fg3;
+  }
+}
+
+// ── Right sidebar ────────────────────────────────────────────────────
+.rightSidebar {
+  width: 280px;
+  flex-shrink: 0;
+  border-left: 1px solid $border;
+  background: $bg2;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.rightSection {
+  border-bottom: 1px solid $border;
+  flex-shrink: 0;
+}
+
+.rightSectionHeader {
+  padding: 8px 14px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $fg3;
+}
+
+.layerCards {
+  padding: 0 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.layerCard {
+  border: 1px solid $border;
+  background: $card;
+  border-radius: 2px;
+  overflow: hidden;
+  transition: border-color 0.15s;
+
+  &.layerCardOn {
+    border-color: rgba($accent, 0.4);
+  }
+}
+
+.layerCardTop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    background: rgba(255,255,255,0.02);
+  }
+}
+
+.layerToggle {
+  width: 28px;
+  height: 14px;
+  border-radius: 7px;
+  background: $border;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: $fg3;
+    top: 2px;
+    left: 2px;
+    transition: left 0.2s, background 0.2s;
+  }
+
+  &.layerToggleOn {
+    background: rgba($accent, 0.3);
+
+    &::after {
+      left: 16px;
+      background: $accent;
+    }
+  }
+}
+
+.layerName {
+  font-size: 11px;
+  color: $fg;
+  flex: 1;
+}
+
+.layerCardDesc {
+  padding: 0 10px 8px;
+  font-size: 10px;
+  color: $fg3;
+  line-height: 1.55;
+  animation: stepFadeIn 0.2s ease;
+}
+
+.becomesPattern {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 6px;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $accent;
+  border: 1px solid rgba($accent, 0.3);
+  border-radius: 2px;
+}
+
+.legendWrap {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 10px 10px;
+
+  &::-webkit-scrollbar { width: 3px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: $border; }
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 0;
+}
+
+.legendDot {
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  flex-shrink: 0;
+}
+
+.legendLabel {
+  font-size: 10px;
+  color: $fg3;
+  text-transform: capitalize;
+}
+
+// ── Node tooltip / detail popup ──────────────────────────────────────
+.nodeTooltip {
+  position: absolute;
+  z-index: 50;
+  background: $card;
+  border: 1px solid $border;
+  border-radius: 3px;
+  padding: 10px 12px;
+  max-width: 220px;
+  pointer-events: none;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  animation: stepFadeIn 0.15s ease;
+}
+
+.tooltipTech {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $accent;
+  margin-bottom: 4px;
+}
+
+.tooltipLabel {
+  font-size: 12px;
+  color: $fg;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.tooltipDetails {
+  font-size: 10px;
+  color: $fg2;
+  line-height: 1.55;
+}
+
+// ── Sample IO panel ─────────────────────────────────────────────────
+.samplePanel {
+  padding: 0 10px 10px;
+}
+
+.sampleRow {
+  margin-bottom: 8px;
+}
+
+.sampleLabel {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $fg3;
+  margin-bottom: 3px;
+}
+
+.sampleText {
+  font-size: 10px;
+  color: $fg2;
+  line-height: 1.5;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid $border;
+  border-radius: 2px;
+  padding: 5px 8px;
+}
