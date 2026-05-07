@@ -1,25 +1,18 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useLang, type Lang } from '@/i18n/context'
 
 export default function NavTools() {
-  const [theme, setTheme] = useState<string>(() => {
-    if (typeof document === 'undefined') return 'light'
-    return document.documentElement.getAttribute('data-theme') ?? 'light'
-  })
-  const [lang, setLang] = useState<string>(() => {
-    if (typeof window === 'undefined') return 'fr'
-    return localStorage.getItem('lang') ?? 'fr'
-  })
+  const { lang, setLang } = useLang()
+  const [theme, setTheme] = useState<string>('light')
 
   useEffect(() => {
-    // Apply persisted theme to DOM — MutationObserver picks it up and calls setTheme
     const storedTheme = localStorage.getItem('theme')
     if (storedTheme) {
       document.documentElement.setAttribute('data-theme', storedTheme)
     }
 
-    // Sync React state whenever data-theme changes (from toggle, terminal, etc.)
     const observer = new MutationObserver(() => {
       setTheme(document.documentElement.getAttribute('data-theme') ?? 'light')
     })
@@ -27,6 +20,7 @@ export default function NavTools() {
       attributes: true,
       attributeFilter: ['data-theme'],
     })
+    setTheme(document.documentElement.getAttribute('data-theme') ?? 'light')
     return () => observer.disconnect()
   }, [])
 
@@ -38,9 +32,7 @@ export default function NavTools() {
   }
 
   function toggleLang() {
-    const next = lang === 'fr' ? 'en' : 'fr'
-    setLang(next)
-    localStorage.setItem('lang', next)
+    setLang(lang === 'fr' ? 'en' : 'fr' as Lang)
   }
 
   const isDarkish = theme === 'dark' || theme === 'clement'

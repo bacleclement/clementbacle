@@ -7,6 +7,7 @@ import type { UseCase, NodeDef, EdgeDef, StepDef, LayerDef } from './usecases';
 import Canvas, { NodeTooltip, NODE_STYLES_DARK, NODE_STYLES_LIGHT, useIsDark } from './canvas';
 import type { PositionedNode } from './canvas';
 import styles from './lab.module.scss';
+import { useLang } from '@/i18n/context';
 
 // ── Types ─────────────────────────────────────────────────────────────
 
@@ -61,38 +62,15 @@ function mergeFlow(useCase: UseCase, layers: LayerState): MergedFlow {
   };
 }
 
-// ── Layer display names ───────────────────────────────────────────────
-
-const LAYER_LABELS: Record<LayerKey, string> = {
-  security: 'Security',
-  reliability: 'Reliability',
-  evaluation: 'Evaluation',
-};
-
-// ── NodeType display name ─────────────────────────────────────────────
-
-const TYPE_LABELS: Record<string, string> = {
-  input: 'Input',
-  output: 'Output',
-  llm: 'LLM',
-  agent: 'Agent',
-  orchestrator: 'Orchestrator',
-  router: 'Router',
-  aggregator: 'Aggregator',
-  tools: 'Tools',
-  env: 'Environment',
-  gate: 'Gate',
-  retry: 'Retry',
-  guard: 'Guard',
-  human: 'Human',
-  eval: 'Evaluator',
-};
 
 // ── Page ──────────────────────────────────────────────────────────────
 
 export default function AgentPatternsPage() {
   const isDark = useIsDark();
   const NODE_STYLES = isDark ? NODE_STYLES_DARK : NODE_STYLES_LIGHT;
+  const { t } = useLang();
+  const LAYER_LABELS = t.lab.layerNames;
+  const TYPE_LABELS = t.lab.nodeTypes;
   const [selectedCaseId, setSelectedCaseId] = useState(USE_CASES[0].id);
   const [layers, setLayers] = useState<LayerState>({
     security: false,
@@ -212,15 +190,15 @@ export default function AgentPatternsPage() {
     <div className={styles.lab}>
       {/* Top bar */}
       <div className={styles.topBar}>
-        <Link href="/" className={styles.backLink}>← clementbacle.com</Link>
+        <Link href="/" className={styles.backLink}>{t.lab.backLink}</Link>
         <span className={styles.topSep}>/</span>
-        <span className={styles.topTitle}>Agent Patterns Studio</span>
+        <span className={styles.topTitle}>{t.lab.title}</span>
       </div>
 
       <div className={styles.main}>
         {/* Left sidebar — use case picker */}
         <aside className={styles.sidebar}>
-          <div className={styles.sidebarHeader}>Use cases</div>
+          <div className={styles.sidebarHeader}>{t.lab.useCases}</div>
           <div className={styles.caseList}>
             {USE_CASES.map(uc => (
               <div
@@ -281,7 +259,7 @@ export default function AgentPatternsPage() {
                   </>
                 ) : (
                   <div className={styles.stepText} style={{ color: '#636059' }}>
-                    Select a step or click a node to explore the flow.
+                    {t.lab.emptyStep}
                   </div>
                 )}
               </div>
@@ -292,14 +270,14 @@ export default function AgentPatternsPage() {
                 className={styles.stepBtn}
                 onClick={stepBack}
                 disabled={stepIdx <= 0}
-                aria-label="Previous step"
+                aria-label={t.lab.prevStep}
               >
                 ‹
               </button>
               <button
                 className={`${styles.stepBtn} ${styles.stepBtnPlay}`}
                 onClick={togglePlay}
-                aria-label={playing ? 'Pause' : 'Play'}
+                aria-label={playing ? t.lab.pause : t.lab.play}
               >
                 {playing ? '⏸' : '▶'}
               </button>
@@ -307,7 +285,7 @@ export default function AgentPatternsPage() {
                 className={styles.stepBtn}
                 onClick={stepForward}
                 disabled={stepIdx >= flow.steps.length - 1}
-                aria-label="Next step"
+                aria-label={t.lab.nextStep}
               >
                 ›
               </button>
@@ -335,14 +313,14 @@ export default function AgentPatternsPage() {
         <aside className={styles.rightSidebar}>
           {/* Sample I/O */}
           <div className={styles.rightSection}>
-            <div className={styles.rightSectionHeader}>Sample I/O</div>
+            <div className={styles.rightSectionHeader}>{t.lab.sampleIO}</div>
             <div className={styles.samplePanel}>
               <div className={styles.sampleRow}>
-                <div className={styles.sampleLabel}>Input</div>
+                <div className={styles.sampleLabel}>{t.lab.sampleIn}</div>
                 <div className={styles.sampleText}>{selectedCase.sampleInput}</div>
               </div>
               <div className={styles.sampleRow}>
-                <div className={styles.sampleLabel}>Output</div>
+                <div className={styles.sampleLabel}>{t.lab.sampleOut}</div>
                 <div className={styles.sampleText}>{selectedCase.sampleOutput}</div>
               </div>
             </div>
@@ -350,7 +328,7 @@ export default function AgentPatternsPage() {
 
           {/* Layer toggles */}
           <div className={styles.rightSection}>
-            <div className={styles.rightSectionHeader}>Layers</div>
+            <div className={styles.rightSectionHeader}>{t.lab.layers}</div>
             <div className={styles.layerCards}>
               {(['security', 'reliability', 'evaluation'] as LayerKey[]).map(key => {
                 const layer = selectedCase.layers[key];
@@ -388,7 +366,7 @@ export default function AgentPatternsPage() {
 
           {/* Legend */}
           <div className={styles.rightSection} style={{ borderBottom: 'none', flex: 1 }}>
-            <div className={styles.rightSectionHeader}>Legend</div>
+            <div className={styles.rightSectionHeader}>{t.lab.legend}</div>
             <div className={styles.legendWrap}>
               {legendTypes.map(type => {
                 const s = NODE_STYLES[type as keyof typeof NODE_STYLES];

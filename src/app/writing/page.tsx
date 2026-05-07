@@ -4,12 +4,12 @@ import { getArticles, type Article } from '@/lib/articles'
 import styles from './writing.module.scss'
 
 export const metadata: Metadata = {
-  title: 'Writing',
-  description: 'Essays at the intersection of software engineering, entrepreneurship, and AI workflows — from architecture to business strategy.',
+  title: 'Écriture',
+  description: 'Essais à l\'intersection du génie logiciel, de l\'entrepreneuriat et des workflows IA — de l\'architecture à la stratégie.',
   alternates: { canonical: 'https://clementbacle.com/writing' },
   openGraph: {
-    title: 'Writing — Clément Bacle',
-    description: 'Essays at the intersection of software engineering, entrepreneurship, and AI workflows.',
+    title: 'Écriture — Clément Bacle',
+    description: 'Essais à l\'intersection du génie logiciel, de l\'entrepreneuriat et des workflows IA.',
     url: 'https://clementbacle.com/writing',
   },
 }
@@ -53,12 +53,12 @@ export default function WritingPage() {
           <div className="eyebrow" style={{ marginBottom: 'var(--s-5)' }}>
             ~/writing &mdash; {articles.length} essay{articles.length !== 1 ? 's' : ''} · 2021–2026
           </div>
-          <h1>On software, <em>business</em><br />and AI.</h1>
+          <h1>Sur le logiciel, <em>l&rsquo;entrepreneuriat</em><br />et l&rsquo;IA.</h1>
         </div>
         <p className={styles.lede}>
-          Essays at the intersection of software engineering,
-          entrepreneurship, and AI workflows &mdash; from architecture
-          to business strategy.
+          Essais à l&rsquo;intersection du génie logiciel,
+          de l&rsquo;entrepreneuriat et des workflows IA &mdash; de l&rsquo;architecture
+          à la stratégie d&rsquo;entreprise.
         </p>
       </header>
 
@@ -66,7 +66,7 @@ export default function WritingPage() {
       {latest5.length > 0 && (
         <section className={styles.strip}>
           <div className={styles.stripHead}>
-            <span>★ recently · last {latest5.length}</span>
+            <span>★ récemment · les {latest5.length} derniers</span>
           </div>
           <div className={styles.stripGrid}>
             {latest5.map((a, i) => (
@@ -105,7 +105,7 @@ export default function WritingPage() {
           <section key={year} className={styles.yearBlock}>
             <div className={styles.yearHead}>
               <h3>{year}</h3>
-              <div className={styles.meta}>{yearArticles.length} essay{yearArticles.length !== 1 ? 's' : ''} · ~{totalMin} min total</div>
+              <div className={styles.meta}>{yearArticles.length} essai{yearArticles.length !== 1 ? 's' : ''} · ~{totalMin} min au total</div>
             </div>
             {yearArticles.map((a, i) => {
               const globalNum = articles.indexOf(a)
@@ -131,7 +131,7 @@ export default function WritingPage() {
 
       {articles.length === 0 && (
         <p style={{ padding: 'var(--s-9) 0', fontFamily: 'var(--mono)', color: 'var(--muted)' }}>
-          no articles yet.
+          pas encore d&apos;articles.
         </p>
       )}
 

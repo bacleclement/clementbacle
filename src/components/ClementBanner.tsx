@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useLang } from '@/i18n/context'
 
 export default function ClementBanner() {
   const [active, setActive] = useState(false)
+  const { t } = useLang()
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -27,11 +29,11 @@ export default function ClementBanner() {
   return (
     <div className="clement-banner" id="clementBanner" role="status" aria-live="polite">
       <span>
-        <b>phosphor mode</b> · CRT engaged · type{' '}
-        <span style={{ fontFamily: 'var(--font-mono)' }}>clement</span> again to exit
+        <b>{t.banner.label}</b> · {t.banner.crt} · type{' '}
+        <span style={{ fontFamily: 'var(--font-mono)' }}>clement</span>{' '}{t.banner.typeAgain}
       </span>
       <button type="button" id="clementExit" onClick={exit}>
-        exit
+        {t.banner.exit}
       </button>
     </div>
   )

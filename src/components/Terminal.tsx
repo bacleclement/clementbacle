@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { initGame, processCommand as gameCmd, INTRO, type GameState } from '../lib/game-lovecraft'
+import { useLang } from '@/i18n/context'
 
 interface LogLine {
   id: number
@@ -26,6 +27,7 @@ function escHtml(s: string): string {
 export default function Terminal() {
   const router = useRouter()
   const pathname = usePathname()
+  const { t } = useLang()
   const [collapsed, setCollapsed] = useState(true)
   const [navH, setNavH] = useState(57)
   const [inGame, setInGame] = useState(false)
@@ -53,7 +55,7 @@ export default function Terminal() {
   }, [collapsed])
 
   const [lines, setLines] = useState<LogLine[]>([
-    { id: lineId++, html: '<span class="p">~ $</span> <span class="dim">welcome. type</span> <span class="kw">help</span> <span class="dim">to list commands.</span>' },
+    { id: lineId++, html: `<span class="p">~ $</span> <span class="dim">${t.terminal.welcome}</span>` },
   ])
   const [input, setInput] = useState('')
   const [history, setHistory] = useState<string[]>([])
@@ -65,17 +67,17 @@ export default function Terminal() {
   useEffect(() => { pathnameRef.current = pathname }, [pathname])
 
   useEffect(() => {
-    const nav = document.querySelector('nav')
-    if (nav) queueMicrotask(() => setNavH(nav.offsetHeight))
-  }, [])
-
-  useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
   }, [lines])
 
   useEffect(() => {
     if (!collapsed) inputRef.current?.focus()
   }, [collapsed])
+
+  useEffect(() => {
+    const nav = document.querySelector('nav')
+    if (nav) queueMicrotask(() => setNavH(nav.offsetHeight))
+  }, [])
 
   const currentPath = pathname === '/' ? '~/home' : '~' + pathname
   const promptPath = inGame ? '[miskatonic]' : currentPath
@@ -86,50 +88,38 @@ export default function Terminal() {
 
   const nav = useCallback(
     (href: string) => {
-      out(`<span class="dim">→ navigating to ${escHtml(href)}…</span>`)
+      out(t.terminal.nav(escHtml(href)))
       setTimeout(() => router.push(href), 220)
     },
-    [out, router],
+    [out, router, t],
   )
 
   const CMDS = useCallback((): Record<string, (arg?: string) => void> => ({
     help: () => {
-      out('<span class="ok">available commands</span>')
+      out(`<span class="ok">${t.terminal.help.header}</span>`)
       out(
         '<table>' +
-          '<tr><td>help</td><td><span class="dim">show this list</span></td></tr>' +
-          '<tr><td>ls</td><td><span class="dim">list pages</span></td></tr>' +
-          '<tr><td>cd &lt;path&gt;</td><td><span class="dim">go to page · /home /writing /projects /about</span></td></tr>' +
-          '<tr><td>/home</td><td><span class="dim">shortcut · same for /writing /projects …</span></td></tr>' +
-          '<tr><td>whoami</td><td><span class="dim">about clement</span></td></tr>' +
-          '<tr><td>cat skills.txt</td><td><span class="dim">stack &amp; skills</span></td></tr>' +
-          '<tr><td>cat focus.txt</td><td><span class="dim">current focus</span></td></tr>' +
-          '<tr><td>contact</td><td><span class="dim">how to reach me</span></td></tr>' +
-          '<tr><td>play</td><td><span class="dim">text adventure · The Miskatonic Manuscript</span></td></tr>' +
-          '<tr><td>theme</td><td><span class="dim">toggle dark / light</span></td></tr>' +
-          '<tr><td>clear</td><td><span class="dim">clear log</span></td></tr>' +
+          t.terminal.help.rows
+            .map(([cmd, desc]) => `<tr><td>${cmd}</td><td><span class="dim">${desc}</span></td></tr>`)
+            .join('') +
           '</table>',
       )
     },
     ls: () => {
-      out('<span class="ok">pages</span>')
+      out(`<span class="ok">${t.terminal.ls.header}</span>`)
       out(
         '<table>' +
-          '<tr><td>~/home</td><td><span class="dim">landing</span></td></tr>' +
-          '<tr><td>~/writing</td><td><span class="dim">essais &amp; notes</span></td></tr>' +
-          '<tr><td>~/projects</td><td><span class="dim">things I built</span></td></tr>' +
-          '<tr><td>~/about</td><td><span class="dim">bio &amp; stack</span></td></tr>' +
+          t.terminal.ls.rows
+            .map(([path, desc]) => `<tr><td>${path}</td><td><span class="dim">${desc}</span></td></tr>`)
+            .join('') +
           '</table>',
       )
     },
     whoami: () => {
-      out('clément bacle — senior <b style="color: var(--fg);">fullstack</b> &amp; software engineer.')
-      out('<span class="dim">ten years shipping web. ex-founder (12 ppl). currently at hublo (healthtech).</span>')
+      t.terminal.whoami.forEach(line => out(line))
     },
     contact: () => {
-      out('email · <span class="kw">clement [at] clementbacle.com</span>')
-      out('github · <span class="kw">@clementbacle</span>')
-      out('<span class="dim">no DMs about freelance — salarié heureux.</span>')
+      t.terminal.contact.forEach(line => out(line))
     },
     theme: () => {
       const root = document.documentElement
@@ -137,7 +127,7 @@ export default function Terminal() {
       const next = current === 'light' ? 'dark' : 'light'
       root.setAttribute('data-theme', next)
       localStorage.setItem('theme', next)
-      out(`<span class="ok">theme · ${next}</span>`)
+      out(t.terminal.theme(next))
     },
     clear: () => setLines([]),
     clement: () => {
@@ -147,20 +137,14 @@ export default function Terminal() {
         const prev = root.getAttribute('data-prev-theme') ?? 'light'
         root.setAttribute('data-theme', prev)
         localStorage.setItem('theme', prev)
-        out(`<span class="ok">&gt; phosphor mode disengaged. back to ${prev}.</span>`)
+        out(t.terminal.clement.disengage(prev))
         return
       }
       root.setAttribute('data-prev-theme', cur ?? 'light')
       root.setAttribute('data-theme', 'clement')
       localStorage.setItem('theme', 'clement')
-      out('<span class="ok">&gt; engaging CRT phosphor mode...</span>')
-      setTimeout(
-        () =>
-          out(
-            '<span class="dim">scanlines synced. type</span> <span class="kw">clement</span> <span class="dim">again or click exit to revert.</span>',
-          ),
-        200,
-      )
+      out(t.terminal.clement.engage)
+      setTimeout(() => out(t.terminal.clement.synced('clement')), 200)
     },
     play: () => {
       const s = initGame()
@@ -171,26 +155,24 @@ export default function Terminal() {
     cat: (arg?: string) => {
       const f = (arg ?? '').toLowerCase().replace(/^\.\//, '')
       if (f === 'skills.txt' || f === 'skills') {
-        out('<span class="ok">~/skills.txt</span>')
+        out(`<span class="ok">${t.terminal.cat.skills.header}</span>`)
         out(
           '<table>' +
-            '<tr><td>front</td><td>react · angular · svelte · typescript</td></tr>' +
-            '<tr><td>back</td><td>nestjs · node · express</td></tr>' +
-            '<tr><td>data</td><td>mongodb · postgresql · redis</td></tr>' +
-            '<tr><td>ai</td><td>anthropic · openai · mcp · langchain</td></tr>' +
-            '<tr><td>infra</td><td>docker · gh actions · vercel · fly.io</td></tr>' +
+            t.terminal.cat.skills.rows
+              .map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`)
+              .join('') +
             '</table>',
         )
       } else if (f === 'focus.txt' || f === 'focus') {
-        out('<span class="ok">~/focus.txt</span>')
-        out('› ai agents · context engineering · mcp · nestjs · entrepreneuriat')
+        out(`<span class="ok">${t.terminal.cat.focus.header}</span>`)
+        out(t.terminal.cat.focus.text)
       } else if (!f) {
-        out('<span class="err">cat: missing operand</span>')
+        out(t.terminal.cat.missing)
       } else {
-        out(`<span class="err">cat: ${escHtml(f)}: no such file</span>`)
+        out(t.terminal.cat.notFound(escHtml(f)))
       }
     },
-  }), [out])
+  }), [out, t])
 
   const run = useCallback(
     (raw: string) => {
@@ -218,7 +200,7 @@ export default function Terminal() {
       if (cmd.startsWith('/')) {
         const route = ROUTES[cmd] ?? ROUTES[cmd.toLowerCase()]
         if (route) return nav(route)
-        out('<span class="err">no such page · try ls</span>')
+        out(t.terminal.errors.noSuchPage)
         return
       }
 
@@ -228,7 +210,7 @@ export default function Terminal() {
         const key = target.startsWith('/') ? target : '/' + target.replace(/^~\/?/, '')
         const route = ROUTES[key] ?? ROUTES[key.toLowerCase()]
         if (route) return nav(route)
-        out(`<span class="err">cd: ${escHtml(target)}: no such directory</span>`)
+        out(t.terminal.errors.cdNotFound(escHtml(target)))
         return
       }
 
@@ -238,9 +220,9 @@ export default function Terminal() {
         fn(rest.join(' '))
         return
       }
-      out(`<span class="err">${escHtml(name)}: command not found · try </span><span class="kw">help</span>`)
+      out(t.terminal.errors.notFound(escHtml(name)))
     },
-    [out, nav, CMDS],
+    [out, nav, CMDS, t],
   )
 
   function handleSubmit(e: React.FormEvent) {
@@ -302,7 +284,7 @@ export default function Terminal() {
             {promptPath} &mdash;{' '}
             {inGame
               ? <>text adventure · type <span className="kw">help</span></>
-              : <>type a command · try <span className="kw">help</span></>
+              : <>type · <span className="kw">help</span></>
             }
           </span>
           <button

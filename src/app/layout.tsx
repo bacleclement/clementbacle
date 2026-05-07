@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import ClementBanner from "@/components/ClementBanner";
 import Terminal from "@/components/Terminal";
 import ScrollTop from "@/components/ScrollTop";
+import { LangProvider } from "@/i18n/context";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
@@ -69,12 +70,14 @@ export default function RootLayout({
       className={`${newsreader.variable} ${jetbrainsMono.variable} ${geist.variable}`}
     >
       <body>
-        <Nav />
-        <main>{children}</main>
-        <Footer />
-        <Terminal />
-        <ScrollTop />
-        <ClementBanner />
+        <LangProvider>
+          <Nav />
+          <main>{children}</main>
+          <Footer />
+          <Terminal />
+          <ScrollTop />
+          <ClementBanner />
+        </LangProvider>
       </body>
     </html>
   );

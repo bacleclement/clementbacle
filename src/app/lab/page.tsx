@@ -3,11 +3,11 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Lab',
-  description: 'Interactive experiments at the intersection of AI, agents, and software.',
+  description: 'Expériences interactives à l\'intersection de l\'IA, des agents et du logiciel.',
   alternates: { canonical: 'https://clementbacle.com/lab' },
   openGraph: {
     title: 'Lab — Clément Bacle',
-    description: 'Interactive experiments at the intersection of AI, agents, and software.',
+    description: 'Expériences interactives à l\'intersection de l\'IA, des agents et du logiciel.',
     url: 'https://clementbacle.com/lab',
   },
 }
@@ -17,8 +17,8 @@ const LAB_PROJECTS = [
     slug: 'agent-patterns',
     num: '001',
     title: 'Agent Patterns Studio',
-    desc: 'Interactive canvas for learning LLM agent patterns — Augmented LLM, Routing, Orchestrator-workers, Evaluator-optimizer. 7 real industry use cases with animated flows and progressive complexity layers.',
-    tags: 'agents · patterns · interactive',
+    desc: 'Canvas interactif pour apprendre les patterns d\'agents LLM — LLM augmenté, Routage, Orchestrateur-travailleurs, Évaluateur-optimiseur. 7 cas d\'usage réels avec flows animés et couches de complexité progressives.',
+    tags: 'agents · patterns · interactif',
     year: '2026',
   },
 ]
@@ -26,12 +26,12 @@ const LAB_PROJECTS = [
 export default function LabPage() {
   return (
     <div className="shell" style={{ paddingTop: 'var(--s-8)', paddingBottom: 'var(--s-9)' }}>
-      <div className="eyebrow" style={{ marginBottom: 'var(--s-5)' }}>~/lab · experiments</div>
+      <div className="eyebrow" style={{ marginBottom: 'var(--s-5)' }}>~/lab · expériences</div>
       <h1 style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(36px, 6vw, 64px)', fontWeight: 600, lineHeight: 1.05, marginBottom: 'var(--s-4)' }}>
-        Interactive<br /><em>experiments.</em>
+        Expériences<br /><em>interactives.</em>
       </h1>
       <p style={{ color: 'var(--fg2)', maxWidth: '480px', marginBottom: 'var(--s-8)', fontSize: '15px', lineHeight: 1.6 }}>
-        Tools I build to understand things — agents, patterns, systems. Not products, not prototypes. Just thinking made interactive.
+        Des outils que je construis pour comprendre les choses — agents, patterns, systèmes. Pas des produits, pas des prototypes. Juste de la pensée rendue interactive.
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s-3)' }}>
