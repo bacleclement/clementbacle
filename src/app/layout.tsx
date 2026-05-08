@@ -69,6 +69,15 @@ export default function RootLayout({
       data-theme="light"
       className={`${newsreader.variable} ${jetbrainsMono.variable} ${geist.variable}`}
     >
+      <head>
+        {/* Sync theme init — runs before paint to avoid flash */}
+        <script dangerouslySetInnerHTML={{ __html: `
+          try {
+            var t = localStorage.getItem('theme');
+            if (t === 'dark' || t === 'clement') document.documentElement.setAttribute('data-theme', t);
+          } catch(e) {}
+        `}} />
+      </head>
       <body>
         <LangProvider>
           <Nav />
